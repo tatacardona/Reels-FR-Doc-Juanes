@@ -1,0 +1,267 @@
+{
+  "_comentario": "Ejemplo real comentado. Tiempos en segundos del video CRUDO.",
+  "fps": 25,
+  "clips": [
+    {
+      "src": [
+        9.9,
+        11.8
+      ],
+      "fx": "flash",
+      "_": "Eso me pasó en el 2015 (primer tramo: destello blanco opcional)"
+    },
+    {
+      "src": [
+        28.2,
+        33.4
+      ],
+      "fx": "whoosh",
+      "_": "Nos preparamos juntos... (se saltaron 2 tomas falsas en 17.5 y 24.2)"
+    },
+    {
+      "src": [
+        41.0,
+        45.85
+      ],
+      "fx": "punch",
+      "_": "Los resultados salieron... y eso duele, y mucho"
+    },
+    {
+      "src": [
+        61.05,
+        65.0
+      ],
+      "fx": "punch"
+    },
+    {
+      "src": [
+        68.05,
+        70.1
+      ],
+      "fx": "whoosh",
+      "zoom": 1.55,
+      "_": "pregunta clave: primer plano"
+    },
+    {
+      "src": [
+        86.05,
+        89.6
+      ],
+      "fx": "whoosh",
+      "_": "se usó la 2ª toma; la 1ª (78-83) estaba trabada y 84.5 era un arranque en falso"
+    },
+    {
+      "src": [
+        92.25,
+        93.35
+      ],
+      "fx": "whoosh",
+      "zoom": 1.0,
+      "steps": [
+        [
+          92.8,
+          1.3
+        ]
+      ],
+      "_": "Está en la | mente"
+    },
+    {
+      "src": [
+        93.8,
+        96.2
+      ],
+      "fx": "punch",
+      "zoom": 1.45,
+      "steps": [
+        [
+          94.86,
+          1.6
+        ],
+        [
+          95.38,
+          1.8
+        ]
+      ],
+      "_": "escalera de zoom hasta 'presentas'"
+    },
+    {
+      "src": [
+        99.4,
+        100.75
+      ],
+      "fx": "punch"
+    },
+    {
+      "src": [
+        104.75,
+        107.75
+      ],
+      "fx": "punch"
+    },
+    {
+      "src": [
+        116.0,
+        121.4
+      ],
+      "fx": "whoosh"
+    },
+    {
+      "src": [
+        127.3,
+        130.9
+      ],
+      "fx": "whoosh",
+      "_": "cierre con la marca; se cortó el 'ahí quedó' final"
+    }
+  ],
+  "emphasis": [
+    [
+      "2015",
+      10.8
+    ],
+    [
+      "juntos",
+      28.9
+    ],
+    [
+      "todos",
+      42.4
+    ],
+    [
+      "pasaron",
+      42.7
+    ],
+    [
+      "yo",
+      43.5
+    ],
+    [
+      "no",
+      43.7
+    ],
+    [
+      "duele",
+      44.6
+    ],
+    [
+      "mucho",
+      45.3
+    ],
+    [
+      "piensas",
+      62.6
+    ],
+    [
+      "ellos",
+      68.6
+    ],
+    [
+      "descubrí",
+      86.5
+    ],
+    [
+      "diferencia",
+      87.4
+    ],
+    [
+      "mente",
+      92.8
+    ],
+    [
+      "preparas",
+      94.3
+    ],
+    [
+      "crees",
+      99.9
+    ],
+    [
+      "confías",
+      105.4
+    ],
+    [
+      "seguridad",
+      116.4
+    ],
+    [
+      "lograr",
+      117.9
+    ],
+    [
+      "transformar",
+      128.7
+    ],
+    [
+      "futuros",
+      129.3
+    ],
+    [
+      "residentes",
+      129.6
+    ]
+  ],
+  "word_fixes": [
+    {
+      "at": 127.0,
+      "word": "y",
+      "s": 127.42,
+      "e": 127.56
+    },
+    {
+      "at": 127.4,
+      "word": "eso",
+      "s": 127.56,
+      "e": 127.82
+    },
+    {
+      "at": 84.28,
+      "word": "Lo",
+      "s": 86.15,
+      "e": 86.26
+    },
+    {
+      "at": 84.72,
+      "word": "que",
+      "s": 86.26,
+      "e": 86.4
+    },
+    {
+      "at": 84.88,
+      "word": "descubrí",
+      "s": 86.4,
+      "e": 86.78
+    }
+  ],
+  "idea_start": [
+    127.42
+  ],
+  "photos": [
+    {
+      "src": "amigos-mejorada.jpg",
+      "show_at": 41.0,
+      "tear_at": 43.5,
+      "_": "entra en 'Los resultados salieron', se rasga en 'yo no'"
+    }
+  ],
+  "brand_words": {
+    "futuros": "Futuros",
+    "residentes": "Residentes",
+    "doc": "Doc",
+    "juanes": "Juanes"
+  },
+  "pad_in": 0.05,
+  "pad_out": 0.07,
+  "max_pause": 0.12,
+  "framings": [
+    1.0,
+    1.35,
+    1.12,
+    1.5,
+    1.0,
+    1.25,
+    1.42,
+    1.08,
+    1.55,
+    1.2
+  ]
+}

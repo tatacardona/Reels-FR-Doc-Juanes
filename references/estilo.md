@@ -1,6 +1,7 @@
 # Guía de estilo: Reels de Futuros Residentes / Doc Juanes
 
-Cada regla viene de una corrección o aprobación explícita de la usuaria. El porqué importa: si un
+Es el estilo aprobado por Janeth Cardona, responsable del estilo de estos videos: cada regla viene
+de una corrección o aprobación suya y aplica para todo el equipo. El porqué importa: si un
 video nuevo no encaja en una regla, decide con el espíritu de la regla.
 
 ## Ritmo y cortes
@@ -8,7 +9,7 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
   muertos", "corta más los cambios de frase"). Por defecto: márgenes de 0,03 s al inicio/final del tramo,
   0,02 s en las pausas internas, pausas > 0,08 s fuera, umbral 40 dB sobre la voz limpia.
 - **Nunca se corta una palabra**, ni por dentro (las t/k/p/g dejan micro-silencios < 0,15 s que parecen
-  pausas) ni al final de frase, que se dice más bajito. Ella lo nota de inmediato. Whisper "estira"
+  pausas) ni al final de frase, que se dice más bajito. Se nota de inmediato. Whisper "estira"
   palabras sobre el silencio vecino: la protección solo cubre micro-pausas, las pausas reales sí se cortan.
 - **Fuera todo lo que no es el guion final:** claqueta, tomas falsas, arranques en falso (pueden durar
   menos de medio segundo), groserías de error, frases repetidas (la toma más limpia, normalmente la
@@ -28,7 +29,7 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
 - Normales: Montserrat 900, 82 px, blancas. **Sin mayúsculas sostenidas:** minúsculas con mayúscula al
   inicio de cada idea. Marcas ("Futuros Residentes", "Doc Juanes", universidades) bien escritas y juntas.
 - 1-3 palabras por subtítulo; corte en cada idea, en comas/puntos y cuando cambia el énfasis. Palabras
-  cortas no quedan solas. Conserva signos que dan sentido cuando ella los pida (p. ej. ":").
+  cortas no quedan solas. Conserva signos que dan sentido cuando los pidan (p. ej. ":").
 - **Palabras clave:** las dichas con fuerza o con carga clave, solas o en pareja, grandes (110-140 px),
   borde oscuro grueso, entrada con rebote; ~1 cada 1,5-2 s. **Fuente y color se proponen por video según
   el mood**: una o dos fuentes, mismo color o distinto. Le han gustado: Anton (enérgico), Montserrat
@@ -38,8 +39,8 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
 
 ## Imagen
 - **Tono de luz según el mood**, siempre como propuesta con muestra: cálido para lo nostálgico/emotivo
-  (le gustó "cálido suave"), neutro por defecto, frío si el tema lo pide.
-- **Nada de "segunda cámara" simulada** (girar/recortar el mismo plano): no le gustó. Solo si graban
+  (funcionó "cálido suave"), neutro por defecto, frío si el tema lo pide.
+- **Nada de "segunda cámara" simulada** (girar/recortar el mismo plano): se descartó. Solo si graban
   con una segunda cámara real.
 - **Más luz, sin oscuridad:** curva en `prep.sh` que aclara sombras y medios tonos sin quemar la pared,
   corrección suave y viñeta muy suave (0.18). La persona debe verse real: nada de suavizado de piel.
@@ -47,14 +48,14 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
 
 ## Audio
 - **Menos eco pero voz natural:** DeepFilterNet + expansor SUAVE + EQ anti-cajón, −14 LUFS. Quitar todo
-  el eco con un expansor rápido suena a palabras cortadas: ella prefirió la versión natural.
+  el eco con un expansor rápido suena a palabras cortadas: se prefirió la versión natural.
 - Micro-fundidos solo en cortes reales; tramos contiguos sin fundido.
 - El whoosh es corto (7 cuadros), suave (0.3) y termina justo en el corte: si es largo tapa el final de
   la palabra anterior o la primera sílaba de la siguiente. Donde ya hay otro sonido, no se pone whoosh.
 
 ## Eco
 - Eco suave (3 rebotes que se apagan, sin tapar lo siguiente) para una frase de trascendencia. Se propone
-  si se detecta una frase así, o se aplica si ella lo pide.
+  si se detecta una frase así, o se aplica si lo piden.
 
 ## Efectos y stickers (solo si los pide)
 - Cada efecto tiene que ver con lo que se dice; ~1 cada 3-5 s, no más. Salen del lado hacia donde la
@@ -69,9 +70,9 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
 - Para videos inspiradores: luz de sol con colores (dorado, naranja, rosa, toque turquesa) que entra por
   una esquina superior y cruza, solo en los **cambios de tema**, no en cada corte.
 - **Discreto** (`LEAK_STRENGTH` 0.25): uno fuerte lava la cara como neblina. **Sin sonido** (`LEAK_SOUND`
-  null): un brillo de campanitas no le gustó.
+  null): un brillo de campanitas se descartó.
 
 ## Música (solo si la pide)
-- Ver `musica.md`. Siempre libre de derechos, nunca repetida salvo que ella diga que se puede reciclar.
+- Ver `musica.md`. Siempre libre de derechos, nunca repetida salvo que Janeth autorice reciclarla.
 - Va suave debajo de la voz, con hueco de ecualización para la voz, fundido de 1 s al entrar y salir.
   Ni tan baja que "no se perciba" ni tan alta que compita: ~18-23 dB bajo la voz.

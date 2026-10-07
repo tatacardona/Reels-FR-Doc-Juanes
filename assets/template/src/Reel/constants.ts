@@ -33,7 +33,7 @@ export const VIDEO_SRC = "video-vertical.mp4";
 export const FACE_ORIGIN = "50% 23%";
 export const CAPTION_TOP = "63%";
 
-// Música de fondo: SOLO si la usuaria la pide. Archivo en /public, con licencia libre (CC0 / dominio público).
+// Música de fondo: SOLO si la piden. Archivo en /public, con licencia libre (CC0 / dominio público).
 // Anota aquí título, artista, licencia y fuente.
 export const MUSICA: string | null = null;
 export const MUSICA_INICIO_SEG = 0; // desde qué segundo de la canción empieza (donde ya tiene energía)
@@ -43,7 +43,7 @@ export const VOLUMEN_MUSICA = 0.1; // ~20 dB por debajo de la voz
 export const WARM = 0;
 export const COOL = 0;
 
-// Destellos de luz en transiciones (fx "leak"): 0.25 = discreto (el que ella prefiere)
+// Destellos de luz en transiciones (fx "leak"): 0.25 = discreto (el aprobado)
 export const LEAK_STRENGTH = 0.25;
-// Sonido en el destello: null por defecto (no le gustaron las campanitas "sfx-shimmer.wav")
+// Sonido en el destello: null por defecto (se descartaron las campanitas "sfx-shimmer.wav")
 export const LEAK_SOUND: string | null = null;

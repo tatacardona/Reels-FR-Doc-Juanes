@@ -19,6 +19,8 @@ Para música, `references/musica.md`.
   lo subjetivo: efectos de sonido, volumen de la música y cortes muy apretados.
 - Muéstrale fotogramas y el MP4 en cada versión. Cuando pida un cambio, ubícalo en el segundo del
   video EDITADO que menciona (mapea con `src/Reel/edit.json`) y confirma qué frase es.
+- **Marca:** en el plan confirma si el video es de **Doc Juanes** o de **Futuros Residentes (FR)**.
+  Define la carpeta del proyecto y el espacio de Google Chat donde se avisa (Paso 9).
 - **Nombres:** en el plan propón (o pídele) un **NOMBRE_CORTO** en mayúsculas con guiones bajos
   (p. ej. `JUANCHO_PASASTE`); es también el nombre de la carpeta del proyecto.
   - Mientras se revisa: cada versión con número para que no vea una vieja ("no percibo cambios"):
@@ -100,8 +102,9 @@ La primera transcripción descarga el modelo large-v3-turbo (~1,6 GB): pide perm
   `references/problemas.md` y cuéntaselo a Janeth.
 
 ## Paso 1: Proyecto Remotion
-- Proyectos en **`$PROYECTOS/NOMBRE_CORTO`** (Mac: Películas → Reels Doc Juanes; Windows: Videos →
-  Reels Doc Juanes), uno por video.
+- Proyectos en **`$PROYECTOS/<MARCA>/NOMBRE_CORTO`**, con `<MARCA>` = `Doc Juanes` o `FR` (Mac: Películas →
+  Reels Doc Juanes; Windows: Videos → Reels Doc Juanes), uno por video. Proyectos anteriores para copiar: en
+  esas dos subcarpetas.
 - Lo más rápido: copia `package.json`, `package-lock.json`, `tsconfig.json`, `remotion.config.ts`,
   `src/index.ts`, `src/index.css` y `src/Root.tsx` de un proyecto anterior, y `node_modules` (Mac:
   `cp -c -R`, clon instantáneo; Windows: `npm ci`). Sin proyecto previo: `npx create-video@latest`
@@ -231,6 +234,28 @@ Con la primera versión del video (o cuando la apruebe), **propónle 3 portadas*
   a **`NOMBRE_CORTO_PORTADA.jpg`** (sin número, sin esperar a que apruebe el video). El video va **sin**
   portada (se sube a mano en Instagram: "Editar portada → Agregar desde la galería"). Solo si lo pide,
   `FF="$FF" ./scripts/portada.sh portada.jpg video.mp4 salida.mp4` la pone como primer cuadro (0,12 s).
+
+## Paso 9: Subir a Drive y avisar al equipo (al aprobar la versión definitiva)
+Cuando apruebe el video y ya estén renombrados `NOMBRE_CORTO_REEL.mp4` y `NOMBRE_CORTO_PORTADA.jpg`:
+1. **Pregúntale siempre en qué carpeta de Drive van** (las carpetas cambian; nunca supongas la del video
+   anterior). Pide el nombre o el enlace de la carpeta.
+2. **Súbelos con Google Drive para escritorio** (el connector de Drive no sirve para videos grandes):
+   ```bash
+   ./scripts/subir-drive.sh "<nombre de la carpeta>" "$DESCARGAS/NOMBRE_CORTO_REEL.mp4" "$DESCARGAS/NOMBRE_CORTO_PORTADA.jpg"
+   ```
+   Imprime el enlace de cada archivo (en Mac lo saca solo). Si no ve la carpeta y es compartida por otra
+   persona, explícale que le agregue un acceso directo en Mi unidad (Drive web: clic derecho → Organizar →
+   Agregar acceso directo) y repite. Si no imprime enlaces (Windows), búscalos con el connector de Drive por
+   el nombre del archivo, si está conectado; si no, pídele que los copie desde Drive (clic derecho →
+   Compartir → Copiar enlace). Si Drive para escritorio no está instalado, pídele que los suba ella o él.
+3. **Muéstrale el mensaje del aviso y espera su sí** antes de enviarlo (lo ve todo el equipo). Cada marca
+   tiene su propio espacio de Chat (`dj` = Doc Juanes, `fr` = Futuros Residentes):
+   ```bash
+   "$PY" scripts/avisar-chat.py <dj|fr> NOMBRE_CORTO --video "<enlace>" --portada "<enlace>" [--nota "<texto>"]
+   ```
+Las URL de los webhooks son secretas y **nunca van en el skill ni en GitHub**: viven en
+`~/.reels-fr-webhook-dj` y `~/.reels-fr-webhook-fr` (una línea cada una). Si falta una, dile que se la pida
+a Janeth y guárdala ahí; prueba con `"$PY" scripts/avisar-chat.py <dj|fr> --prueba`.
 
 ## Pedidos frecuentes
 - **"Corta el segundo X":** mapea X en `edit.json` → tramo y frase; re-transcribe ese pedazo; corrige

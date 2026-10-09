@@ -15,10 +15,11 @@ esac
 
 if [ -d "$DEST" ]; then DIR="$DEST"
 else
-  # Busca la carpeta por nombre en Mi unidad y en las unidades compartidas (poca profundidad: Drive es lento)
+  # Busca la carpeta por nombre en Mi unidad y en las unidades compartidas (poca profundidad: Drive es lento).
+  # -L sigue los accesos directos de Drive (en el disco son enlaces simbólicos)
   for B in "$ROOT/Mi unidad" "$ROOT/My Drive" "$ROOT/Unidades compartidas" "$ROOT/Shared drives"; do
     [ -d "$B" ] || continue
-    DIR=$(find "$B" -maxdepth 3 -type d -name "$DEST" 2>/dev/null | head -1); [ -n "$DIR" ] && break
+    DIR=$(find -L "$B" -maxdepth 3 -type d -name "$DEST" 2>/dev/null | head -1); [ -n "$DIR" ] && break
   done
 fi
 [ -n "$DIR" ] || { echo "No veo la carpeta \"$DEST\" en Drive para escritorio. Si es compartida, agrégale un acceso directo en Mi unidad."; exit 1; }

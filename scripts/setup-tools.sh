@@ -3,7 +3,7 @@
 # Crea un entorno Python con ffmpeg COMPLETO (el de Remotion no trae filtros de audio), faster-whisper,
 # DeepFilterNet (quita eco) y OpenCV/mediapipe. Deja exportados:
 #   $PY  python del entorno      $FF  ffmpeg completo
-#   $DESCARGAS  carpeta Descargas $PROYECTOS  carpeta "Reels Doc Juanes" (Mac: Películas; Windows: Videos)
+#   $DESCARGAS  carpeta Descargas $PROYECTOS  carpeta "Videos Claude/Reels Instagram" (Mac: Películas; Windows: Videos)
 # Uso: source scripts/setup-tools.sh [carpeta_venv]
 # Windows necesita antes (una sola vez): Python 3.11 (winget install Python.Python.3.11) y Node.js LTS
 # (winget install OpenJS.NodeJS.LTS). torch 2.0.1 no existe para Python 3.12 o más nuevo.
@@ -21,11 +21,11 @@ export PYTHONUTF8=1   # Windows: tildes y flechas en archivos y mensajes sin err
 if [ "$REELFR_WIN" = 1 ]; then
   export PY=$(cygpath -m "$VBIN/python.exe")
   export FF=$(cygpath -m "$("$PY" -c "import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())")")
-  export PROYECTOS="$HOME/Videos/Reels Doc Juanes"
+  export PROYECTOS="$HOME/Videos/Videos Claude/Reels Instagram"
 else
   export PY="$VBIN/python"
   export FF=$("$PY" -c "import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())")
-  export PROYECTOS="$HOME/Movies/Reels Doc Juanes"
+  export PROYECTOS="$HOME/Movies/Videos Claude/Reels Instagram"
 fi
 export DESCARGAS="$HOME/Downloads"
 mkdir -p "$PROYECTOS"

@@ -102,9 +102,9 @@ La primera transcripción descarga el modelo large-v3-turbo (~1,6 GB): pide perm
   `references/problemas.md` y cuéntaselo a Janeth.
 
 ## Paso 1: Proyecto Remotion
-- Proyectos en **`$PROYECTOS/<MARCA>/NOMBRE_CORTO`**, con `<MARCA>` = `Doc Juanes` o `FR` (Mac: Películas →
-  Reels Doc Juanes; Windows: Videos → Reels Doc Juanes), uno por video. Proyectos anteriores para copiar: en
-  esas dos subcarpetas.
+- Proyectos en **`$PROYECTOS/<CUENTA>/NOMBRE_CORTO`**, con `<CUENTA>` = `@docjuanes` (Doc Juanes) o
+  `@cursofuturosresidentes` (FR), uno por video (Mac: Películas → Videos Claude → Reels Instagram; Windows:
+  Videos → Videos Claude → Reels Instagram). Proyectos anteriores para copiar: en esas dos subcarpetas.
 - Lo más rápido: copia `package.json`, `package-lock.json`, `tsconfig.json`, `remotion.config.ts`,
   `src/index.ts`, `src/index.css` y `src/Root.tsx` de un proyecto anterior, y `node_modules` (Mac:
   `cp -c -R`, clon instantáneo; Windows: `npm ci`). Sin proyecto previo: `npx create-video@latest`

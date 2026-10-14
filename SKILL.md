@@ -173,7 +173,8 @@ Base: `assets/edit-config.example.json`. Todos los tiempos en segundos del video
   fotogramas), nunca sobre la cara ni los subtítulos. Si un efecto debe seguir la cabeza,
   `"$PY" scripts/head-track.py <inicio> <fin>` + `follow_head: true` dan su posición cuadro a cuadro (`track`).
 - `sounds`: `[[archivo, seg, volumen, desfase_seg]]`; `shakes`: segundos con sacudida (impactos).
-- `end_push: {at, to}`: **cierre por defecto**, acercamiento suave a la cara (~1,6) sin fundido a negro.
+- `end_push: {at, to}`: acercamiento suave a la cara (~1,6) al final, sin fundido a negro. **Es opcional:** no todos los
+  videos lo llevan; propónlo en el plan (con acercamiento o con plano fijo) y que la persona decida.
   `end_hold`: segundos extra al final.
 - `speed`: si pide acelerar (ver Paso 7).
 - **Fuente base** (palabras normales): Montserrat Black 900, blanca con borde negro, salvo que la marca

@@ -23,7 +23,8 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
   escalera el plano solo cambia en los `steps`.
 - **Escaleras de zoom** en ideas que escalan, hasta ~1.8x en la palabra culminante.
 - Preguntas clave o frases de impacto: primer plano (1.5-1.6). Zooms siempre hacia la cara (`FACE_ORIGIN`).
-- **Final nítido, sin fundido a negro:** acercamiento suave a la cara (`end_push`) y ahí termina.
+- **Final nítido, sin fundido a negro.** El acercamiento suave a la cara (`end_push`) es una opción, no la regla:
+  "no todos los videos terminan haciendo zoom" (Janeth, MEDICO_QUE). Se propone en cada plan.
 
 ## Subtítulos
 - Normales: Montserrat 900, 82 px, blancas. **Sin mayúsculas sostenidas:** minúsculas con mayúscula al

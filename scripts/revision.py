@@ -118,7 +118,7 @@ for (const b of D.bloques) {
     for (const [i, txt, t0, t1] of b.palabras) {
       const s = document.createElement('span'); s.className = 'w'; s.textContent = txt;
       s.dataset.pid = b.pid; s.dataset.i = i; s.dataset.t0 = t0; s.dataset.t1 = t1;
-      s.onclick = () => { if (!String(window.getSelection()).trim()) { soltarHueco(); ir(t0); objetivo(); } };
+      s.onclick = () => { if (!String(window.getSelection()).trim()) { soltarHueco(); ir(t0 + 0.03); resaltar(s); objetivo(); } };
       if (todas.length) { p.appendChild(document.createTextNode(' ')); p.appendChild(hueco(todas[todas.length - 1], s)); p.appendChild(document.createTextNode(' ')); }
       p.appendChild(s); todas.push(s);
     }
@@ -138,7 +138,7 @@ function enVideo() {  // la palabra que suena donde está el video (o la más ce
   let mejor = null, d = 0.6;
   for (const s of todas) {
     const x = t < +s.dataset.t0 ? +s.dataset.t0 - t : (t > +s.dataset.t1 ? t - +s.dataset.t1 : 0);
-    if (x < d) { d = x; mejor = s; }
+    if (x < d || (x === 0 && t >= +s.dataset.t0 && t < +s.dataset.t1)) { d = x; mejor = s; }
   }
   return mejor ? [mejor] : [];
 }
@@ -219,14 +219,17 @@ function copiar() {
   else prompt('Copia este texto:', txt);
 }
 let actual = null;
+function resaltar(s) {
+  if (s === actual) return;
+  if (actual) actual.classList.remove('ahora');
+  if (s) { s.classList.add('ahora'); const r = s.getBoundingClientRect(); if (r.top < 260 || r.bottom > innerHeight - 40) s.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  actual = s;
+}
 v.addEventListener('timeupdate', () => {
   if (!seleccionadas() && !gapSel) objetivo();
-  const t = v.currentTime, s = todas.find(s => t >= +s.dataset.t0 && t <= +s.dataset.t1 + 0.05);
-  if (s !== actual) {
-    if (actual) actual.classList.remove('ahora');
-    if (s) { s.classList.add('ahora'); const r = s.getBoundingClientRect(); if (r.top < 260 || r.bottom > innerHeight - 40) s.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-    actual = s;
-  }
+  if (v.paused) return;  // en pausa se queda resaltada la palabra elegida
+  const t = v.currentTime;
+  resaltar(todas.find(s => t >= +s.dataset.t0 && t < +s.dataset.t1) || todas.find(s => t >= +s.dataset.t0 && t <= +s.dataset.t1 + 0.05));
 });
 pintar(); objetivo();
 </script>

@@ -55,6 +55,7 @@
 | Guion 5 (FORMULA_EXITO) | Positive Acoustic Guitar with Soft Beat | JorisVermeer (Pixabay) | `pixabay.com/music/beats-positive-acoustic-guitar-with-soft-beat-526509/` |
 | Guion 3 (SACRIFICIO) | Inspirational Emotional | prettyjohn1 (Pixabay) | `pixabay.com/music/orchestral-inspirational-emotional-580034/` |
 | Guion 4 (POSIBLE_IMPOSIBLE) | Light Energetic Positive Pop Upbeat | nickogloire (Pixabay) | `pixabay.com/music/upbeat-light-energetic-positive-pop-upbeat-236438/` |
+| Guion 7 (MEDICO_QUE) | Chillwave Flow (Full Version) | khemrajdotin (Pixabay) | `pixabay.com/music/synthwave-chillwave-flow-full-version-245704/` |
 
 Probadas y rechazadas por Janeth (no volver a proponer): Ghost Surf Rock (Loyalty Freak Music),
 Powerful Stasis (Soft and Furious).

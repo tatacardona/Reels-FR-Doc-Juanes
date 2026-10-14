@@ -66,10 +66,11 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
     <h1>Revisión · __NOMBRE__</h1>
     <p class="ayuda">Clic en una palabra = el video salta ahí. Para marcar hay dos formas: <b>en el texto</b>, selecciona la palabra o la frase con el mouse;
     <b>en el video</b>, páusalo en el punto (sirve para algo raro que se ve o se oye sin palabra: un zoom extraño, alguien que aparece, un golpe, una respiración).
-    Para un <b>fragmento</b> del video: pausa donde empieza y presiona «Inicio del fragmento»; luego pausa donde termina y elige qué pasa. Puedes decir si es el sonido, la imagen o los dos.
+    Para un <b>fragmento</b> del video: pausa donde empieza y presiona «Inicio del fragmento»; pausa donde termina y presiona «Fin del fragmento»; luego elige qué pasa. Puedes decir si es el sonido, la imagen o los dos.
     Al terminar: «Copiar correcciones» y pégalas en el chat.</p>
     <p id="objetivo" class="ayuda"></p>
     <button class="b-ini" onclick="inicio()">⏮ Inicio del fragmento</button>
+    <button class="b-ini" onclick="final()">⏭ Fin del fragmento</button>
     <select id="que" title="Qué afecta (en el video)"><option value="">sonido e imagen</option><option value="sonido">solo el sonido</option><option value="imagen">solo la imagen</option></select><br>
     <button class="b-cortar" onclick="marcar('cortar')">✂ Cortar</button>
     <button class="b-mal" onclick="marcar('mal')">🔇 Se oye mal</button>
@@ -123,30 +124,37 @@ function enVideo() {  // la palabra que suena donde está el video (o la más ce
   }
   return mejor ? [mejor] : [];
 }
-let ini = null;  // inicio del fragmento (segundo del video), si lo hay
-function inicio() { ini = +v.currentTime.toFixed(2); v.pause(); window.getSelection().removeAllRanges(); objetivo(); }
+let ini = null, fin = null;  // inicio y fin del fragmento (segundos del video), si los hay
+function inicio() { ini = +v.currentTime.toFixed(2); fin = null; v.pause(); window.getSelection().removeAllRanges(); objetivo(); }
+function final() {
+  if (ini === null) { alert('Primero pausa donde empieza el fragmento y presiona «Inicio del fragmento».'); return; }
+  fin = +v.currentTime.toFixed(2); v.pause(); window.getSelection().removeAllRanges(); objetivo();
+}
+function rango() { const b = fin !== null ? fin : +v.currentTime.toFixed(2); return [Math.min(ini, b), Math.max(ini, b)]; }
 function enRango(a, b) { return todas.filter(s => +s.dataset.t1 > a && +s.dataset.t0 < b); }
 function objetivo() {
   const ws = seleccionadas(), o = document.getElementById('objetivo');
   if (ws) o.innerHTML = 'Vas a marcar <b>en el texto</b>: «' + ws.map(s => s.textContent).join(' ').slice(0, 80) + '»';
-  else if (ini !== null) o.innerHTML = 'Vas a marcar <b>el fragmento del video</b> de ' + mmss(Math.min(ini, v.currentTime)) + ' a ' + mmss(Math.max(ini, v.currentTime)) +
-    ' (pausa donde termina y elige) <button class="x" onclick="ini=null;objetivo()">✕ quitar inicio</button>';
+  else if (ini !== null) { const [a, b] = rango();
+    o.innerHTML = 'Vas a marcar <b>el fragmento del video</b> de ' + mmss(a) + ' a ' + mmss(b) +
+    (fin === null ? ' (pausa donde termina y presiona «Fin del fragmento»)' : ' · ya está listo: elige qué pasa') +
+    ' <button class="x" onclick="ini=null;fin=null;objetivo()">✕ quitar fragmento</button>'; }
   else { const w = enVideo(); o.innerHTML = 'Vas a marcar <b>en el video</b>, en ' + mmss(v.currentTime) + (w.length ? ' (suena «' + w[0].textContent + '»)' : ''); }
 }
 document.addEventListener('selectionchange', objetivo);
 function marcar(tipo) {
-  let ws = seleccionadas(), desde = 'texto', t, fin = null;
+  let ws = seleccionadas(), desde = 'texto', t, hasta = null;
   const que = document.getElementById('que').value;
   if (ws) t = +ws[0].dataset.t0;
-  else if (ini !== null) { desde = 'video'; v.pause(); t = Math.min(ini, +v.currentTime.toFixed(2)); fin = Math.max(ini, +v.currentTime.toFixed(2)); ws = enRango(t, fin); }
+  else if (ini !== null) { desde = 'video'; v.pause(); [t, hasta] = rango(); ws = enRango(t, hasta); }
   else { ws = enVideo(); desde = 'video'; t = +v.currentTime.toFixed(2); v.pause(); }
-  const donde = desde === 'texto' ? '«' + ws.map(s => s.textContent).join(' ') + '»' : (fin !== null ? 'el fragmento ' + mmss(t) + '–' + mmss(fin) : 'el video en ' + mmss(t));
+  const donde = desde === 'texto' ? '«' + ws.map(s => s.textContent).join(' ') + '»' : (hasta !== null ? 'el fragmento ' + mmss(t) + '–' + mmss(hasta) : 'el video en ' + mmss(t));
   const nota = tipo === 'nota' ? prompt('¿Qué hay que hacer en ' + donde + '?') : (prompt('Comentario (opcional) sobre ' + donde + ':') || '');
   if (nota === null || (tipo === 'nota' && !nota)) return;
   const piezas = {};
   for (const s of ws) (piezas[s.dataset.pid] = piezas[s.dataset.pid] || []).push(+s.dataset.i);
-  marcas.push({ tipo, t, fin, desde, que: desde === 'video' ? que : '', texto: ws.map(s => s.textContent).join(' '), piezas, nota });
-  ini = null; guardar(); window.getSelection().removeAllRanges(); objetivo();
+  marcas.push({ tipo, t, fin: hasta, desde, que: desde === 'video' ? que : '', texto: ws.map(s => s.textContent).join(' '), piezas, nota });
+  ini = null; fin = null; guardar(); window.getSelection().removeAllRanges(); objetivo();
 }
 function guardar() {
   marcas.sort((a, b) => a.t - b.t);

@@ -220,6 +220,15 @@ no un corte. **Acelerar** (si lo pide): exporta a `work/base_vN.mp4` con crf 16 
 la voz no cambia de tono). Los renders largos van en segundo plano. Envíale el MP4, resume los cambios en
 viñetas cortas y deja la copia en `$DESCARGAS`.
 
+**Página de revisión con cada versión** (Janeth, 13 oct): después del render,
+`"$PY" scripts/revision.py out/<NOMBRE_CORTO>_REEL_v<N>.mp4 [factor de speed.sh]` → `out/<NOMBRE_CORTO>_REEL_v<N>_REVISION.html`
+junto al video (ábrela: `open` en Mac, `start` en Windows; es local, no se publica). Si el proyecto no tiene el script, cópialo de
+`~/.claude/skills/editar-reel-fr/scripts/`. Tiene el video arriba y el texto abajo (los subtítulos), sincronizado: la palabra que suena
+se ilumina y un clic salta ahí. Ella marca **en el texto** (selecciona la palabra o frase) o **en el video** (lo pausa en el punto:
+para lo que se ve o se oye sin palabra) y elige «Cortar», «Se oye mal» o «Nota»; «Copiar correcciones» le da una lista con el
+segundo del video y la frase, que pega en el chat. Cada marca se corrige como «Corta el segundo X» (ver Pedidos frecuentes).
+Genérala con el `edit.json` de esa versión (si cambias el edit antes de que ella revise, deja de coincidir).
+
 ## Paso 8: Portadas (siempre, sin que lo pidan)
 Con la primera versión del video (o cuando la apruebe), **propónle 3 portadas** distintas:
 - Fotogramas con buena expresión (ojos abiertos, sonrisa o gesto que invite), revisados antes en una tira

@@ -57,6 +57,9 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
 .w:hover { background:var(--suave); }
 .w.ahora { background:var(--ahora); }
 .w.cortar { background:var(--marca); text-decoration:line-through; } .w.mal { background:var(--mal); } .w.nota { background:var(--nota); }
+.g { display:inline-block; min-width:.75em; height:1.15em; vertical-align:-.2em; border-radius:4px; cursor:pointer; text-align:center; font-size:11px; line-height:1.15em; color:transparent; }
+.g:hover { background:var(--suave); color:var(--tinta); }
+.g.sel { background:var(--azul); color:#fff; } .g.cortar { background:var(--marca); color:var(--tinta); } .g.mal { background:var(--mal); color:var(--tinta); } .g.nota { background:var(--nota); color:var(--tinta); }
 @media (max-width:800px) { .fila { flex-direction:column; } video { width:100%; } }
 </style></head>
 <body>
@@ -64,7 +67,8 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
   <video id="v" src="__VIDEO__" controls preload="metadata"></video>
   <div class="panel">
     <h1>Revisión · __NOMBRE__</h1>
-    <p class="ayuda">Clic en una palabra = el video salta ahí. Para marcar hay dos formas: <b>en el texto</b>, selecciona la palabra o la frase con el mouse;
+    <p class="ayuda">Clic en una palabra = el video salta ahí y queda en pausa (sigue cuando le das play). Clic en el <b>espacio entre dos palabras</b> = marcas ese hueco
+    (un silencio muy largo para cortar, o un sonido raro justo ahí). Para marcar palabras: <b>en el texto</b>, selecciona la palabra o la frase con el mouse;
     <b>en el video</b>, páusalo en el punto (sirve para algo raro que se ve o se oye sin palabra: un zoom extraño, alguien que aparece, un golpe, una respiración).
     Para un <b>fragmento</b> del video: pausa donde empieza y presiona «Inicio del fragmento»; pausa donde termina y presiona «Fin del fragmento»; luego elige qué pasa. Puedes decir si es el sonido, la imagen o los dos.
     Al terminar: «Copiar correcciones» y pégalas en el chat.</p>
@@ -87,7 +91,20 @@ const CLAVE = 'revision_' + D.video;
 let marcas = [];
 try { marcas = JSON.parse(localStorage.getItem(CLAVE) || '[]'); } catch (e) {}
 const mmss = s => { const m = Math.floor(s / 60), x = (s - m * 60).toFixed(1); return m + ':' + (x < 10 ? '0' : '') + x; };
-const ir = s => { v.currentTime = Math.max(0, s - 0.3); v.play(); };
+const ir = s => { v.pause(); v.currentTime = Math.max(0, s); };  // salta y queda en pausa: sigue solo con play
+const huecos = []; let gapSel = null;  // espacios entre palabras (y entre fragmentos), marcables
+function hueco(prev, sig) {
+  const g = document.createElement('span'); g.className = 'g'; g.textContent = '·'; g.dataset.k = huecos.length;
+  g.title = 'Espacio entre «' + prev.textContent + '» y «' + sig.textContent + '»';
+  g.dataset.t = ((+prev.dataset.t1 + +sig.dataset.t0) / 2).toFixed(2);
+  g.onclick = e => { e.stopPropagation(); window.getSelection().removeAllRanges(); elegirHueco(g); };
+  g._prev = prev; g._sig = sig; huecos.push(g); return g;
+}
+function elegirHueco(g) {
+  if (gapSel) gapSel.classList.remove('sel');
+  gapSel = g; g.classList.add('sel'); ir(+g.dataset.t); objetivo();
+}
+function soltarHueco() { if (gapSel) gapSel.classList.remove('sel'); gapSel = null; }
 const todas = [];
 for (const b of D.bloques) {
   if (b.tipo === 'card') {
@@ -101,8 +118,9 @@ for (const b of D.bloques) {
     for (const [i, txt, t0, t1] of b.palabras) {
       const s = document.createElement('span'); s.className = 'w'; s.textContent = txt;
       s.dataset.pid = b.pid; s.dataset.i = i; s.dataset.t0 = t0; s.dataset.t1 = t1;
-      s.onclick = () => { if (!String(window.getSelection()).trim()) ir(t0); };
-      p.appendChild(s); p.appendChild(document.createTextNode(' ')); todas.push(s);
+      s.onclick = () => { if (!String(window.getSelection()).trim()) { soltarHueco(); ir(t0); objetivo(); } };
+      if (todas.length) { p.appendChild(document.createTextNode(' ')); p.appendChild(hueco(todas[todas.length - 1], s)); p.appendChild(document.createTextNode(' ')); }
+      p.appendChild(s); todas.push(s);
     }
     G.appendChild(p);
   }
@@ -125,7 +143,8 @@ function enVideo() {  // la palabra que suena donde está el video (o la más ce
   return mejor ? [mejor] : [];
 }
 let ini = null, fin = null;  // inicio y fin del fragmento (segundos del video), si los hay
-function inicio() { ini = +v.currentTime.toFixed(2); fin = null; v.pause(); window.getSelection().removeAllRanges(); objetivo(); }
+v.addEventListener('play', () => { soltarHueco(); });
+function inicio() { soltarHueco(); ini = +v.currentTime.toFixed(2); fin = null; v.pause(); window.getSelection().removeAllRanges(); objetivo(); }
 function final() {
   if (ini === null) { alert('Primero pausa donde empieza el fragmento y presiona «Inicio del fragmento».'); return; }
   fin = +v.currentTime.toFixed(2); v.pause(); window.getSelection().removeAllRanges(); objetivo();
@@ -134,7 +153,9 @@ function rango() { const b = fin !== null ? fin : +v.currentTime.toFixed(2); ret
 function enRango(a, b) { return todas.filter(s => +s.dataset.t1 > a && +s.dataset.t0 < b); }
 function objetivo() {
   const ws = seleccionadas(), o = document.getElementById('objetivo');
-  if (ws) o.innerHTML = 'Vas a marcar <b>en el texto</b>: «' + ws.map(s => s.textContent).join(' ').slice(0, 80) + '»';
+  if (ws) soltarHueco();
+  if (!ws && gapSel) o.innerHTML = 'Vas a marcar <b>el espacio</b> entre «' + gapSel._prev.textContent + '» y «' + gapSel._sig.textContent + '» (' + mmss(+gapSel.dataset.t) + '): «Cortar» si el silencio es muy largo, «Se oye mal» si hay un sonido raro';
+  else if (ws) o.innerHTML = 'Vas a marcar <b>en el texto</b>: «' + ws.map(s => s.textContent).join(' ').slice(0, 80) + '»';
   else if (ini !== null) { const [a, b] = rango();
     o.innerHTML = 'Vas a marcar <b>el fragmento del video</b> de ' + mmss(a) + ' a ' + mmss(b) +
     (fin === null ? ' (pausa donde termina y presiona «Fin del fragmento»)' : ' · ya está listo: elige qué pasa') +
@@ -146,6 +167,13 @@ function marcar(tipo) {
   let ws = seleccionadas(), desde = 'texto', t, hasta = null;
   const que = document.getElementById('que').value;
   if (ws) t = +ws[0].dataset.t0;
+  else if (gapSel) {
+    const g = gapSel, donde = 'el espacio entre «' + g._prev.textContent + '» y «' + g._sig.textContent + '»';
+    const nota = tipo === 'nota' ? prompt('¿Qué hay que hacer en ' + donde + '?') : (prompt('Comentario (opcional) sobre ' + donde + ':') || '');
+    if (nota === null || (tipo === 'nota' && !nota)) return;
+    marcas.push({ tipo, t: +g.dataset.t, fin: null, desde: 'espacio', que: '', texto: g._prev.textContent + ' | ' + g._sig.textContent, piezas: {}, hueco: +g.dataset.k, nota });
+    soltarHueco(); guardar(); objetivo(); return;
+  }
   else if (ini !== null) { desde = 'video'; v.pause(); [t, hasta] = rango(); ws = enRango(t, hasta); }
   else { ws = enVideo(); desde = 'video'; t = +v.currentTime.toFixed(2); v.pause(); }
   const donde = desde === 'texto' ? '«' + ws.map(s => s.textContent).join(' ') + '»' : (hasta !== null ? 'el fragmento ' + mmss(t) + '–' + mmss(hasta) : 'el video en ' + mmss(t));
@@ -164,18 +192,21 @@ function guardar() {
 const NOMBRES = { cortar: 'CORTAR', mal: 'SE OYE MAL', nota: 'NOTA', sonido: 'SONIDO' };
 function linea(m, n) {
   const pz = Object.entries(m.piezas).map(([p, is]) => p + ' ' + Math.min(...is) + (is.length > 1 ? '–' + Math.max(...is) : '')).join(', ');
+  if (m.desde === 'espacio') return n + '. ' + (m.tipo === 'cortar' ? 'CORTAR ESPACIO' : m.tipo === 'mal' ? 'SONIDO RARO EN EL ESPACIO' : 'NOTA EN EL ESPACIO') + ' · ' + mmss(m.t) + ' · entre «' + m.texto.split(' | ').join('» y «') + '»' + (m.nota ? ' · ' + m.nota : '');
   return n + '. ' + NOMBRES[m.tipo] + (m.que ? ' ' + (m.que === 'sonido' ? 'SOLO EL SONIDO' : 'SOLO LA IMAGEN') : '') + ' · ' + mmss(m.t) + (m.fin != null ? '–' + mmss(m.fin) : '') + (m.desde === 'video' ? ' (en el video' + (m.texto ? ', suena' : '') : '') + (m.texto ? (m.desde === 'video' ? ' «' + m.texto + '»)' : ' · «' + m.texto + '»') : (m.desde === 'video' ? ')' : '')) + (pz && !D.reel ? ' · [' + pz + ']' : '') + (m.nota ? ' · ' + m.nota : '') +
 ''; 
 }
 function pintar() {
   L.innerHTML = '';
   todas.forEach(s => s.classList.remove('cortar', 'mal', 'nota'));
+  huecos.forEach(g => g.classList.remove('cortar', 'mal', 'nota'));
   marcas.forEach((m, k) => {
     const li = document.createElement('li'); li.textContent = linea(m, k + 1).replace(/^\\d+\\. /, '');
     li.style.cursor = 'pointer'; li.onclick = () => ir(m.t);
     const x = document.createElement('button'); x.className = 'x'; x.textContent = '✕'; x.title = 'Quitar';
     x.onclick = e => { e.stopPropagation(); marcas.splice(k, 1); guardar(); };
     li.appendChild(x); L.appendChild(li);
+    if (m.hueco != null && huecos[m.hueco]) huecos[m.hueco].classList.add(m.tipo === 'sonido' ? 'nota' : m.tipo);
     for (const [p, is] of Object.entries(m.piezas))
       todas.filter(s => s.dataset.pid === p && is.includes(+s.dataset.i)).forEach(s => s.classList.add(m.tipo === 'sonido' ? 'nota' : m.tipo));
   });
@@ -189,7 +220,7 @@ function copiar() {
 }
 let actual = null;
 v.addEventListener('timeupdate', () => {
-  if (!seleccionadas()) objetivo();
+  if (!seleccionadas() && !gapSel) objetivo();
   const t = v.currentTime, s = todas.find(s => t >= +s.dataset.t0 && t <= +s.dataset.t1 + 0.05);
   if (s !== actual) {
     if (actual) actual.classList.remove('ahora');

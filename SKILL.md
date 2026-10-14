@@ -226,7 +226,8 @@ viñetas cortas y deja la copia en `$DESCARGAS`.
 junto al video (ábrela: `open` en Mac, `start` en Windows; es local, no se publica). Si el proyecto no tiene el script, cópialo de
 `~/.claude/skills/editar-reel-fr/scripts/`. Tiene el video arriba y el texto abajo (los subtítulos), sincronizado: la palabra que suena
 se ilumina y un clic salta ahí. Ella marca **en el texto** (selecciona la palabra o frase) o **en el video** (lo pausa en el punto: algo raro que se ve o se oye sin palabra,
-como un zoom extraño, alguien que aparece o un golpe) y elige «Cortar», «Se oye mal» o «Nota»; «Copiar correcciones» le da una lista con el
+como un zoom extraño, alguien que aparece o un golpe), o un **fragmento** del video («Inicio del fragmento» y luego pausa donde
+termina), y dice si afecta el sonido, la imagen o los dos; elige «Cortar», «Se oye mal» o «Nota»; «Copiar correcciones» le da una lista con el
 segundo del video y la frase, que pega en el chat. Cada marca se corrige como «Corta el segundo X» (ver Pedidos frecuentes).
 Genérala con el `edit.json` de esa versión (si cambias el edit antes de que ella revise, deja de coincidir).
 

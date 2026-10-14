@@ -42,7 +42,8 @@ h1 { font-size:18px; margin:0 0 6px; }
 .ayuda { font-size:13px; opacity:.8; margin:0 0 8px; }
 button { font:inherit; font-size:14px; border:0; border-radius:8px; padding:7px 12px; margin:0 6px 6px 0; cursor:pointer; color:var(--tinta); }
 .b-cortar { background:var(--marca); } .b-mal { background:var(--mal); } .b-nota { background:var(--nota); } 
-.b-copiar { background:var(--azul); color:#fff; }
+.b-copiar { background:var(--azul); color:#fff; } .b-ini { background:var(--suave); }
+select { font:inherit; font-size:14px; border-radius:8px; padding:6px; margin:0 6px 6px 0; border:1px solid var(--suave); background:#fffaf0; color:var(--tinta); }
 #marcas { max-height:28vh; overflow:auto; font-size:13px; margin:0; padding-left:20px; }
 #marcas li { margin-bottom:4px; } #marcas .x { background:none; padding:0 4px; margin:0; opacity:.6; }
 main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
@@ -64,9 +65,12 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
   <div class="panel">
     <h1>Revisión · __NOMBRE__</h1>
     <p class="ayuda">Clic en una palabra = el video salta ahí. Para marcar hay dos formas: <b>en el texto</b>, selecciona la palabra o la frase con el mouse;
-    <b>en el video</b>, páusalo en el punto (sirve para algo raro que se ve o se oye sin palabra: un zoom extraño, alguien que aparece, un golpe, una respiración). Luego elige qué pasa.
+    <b>en el video</b>, páusalo en el punto (sirve para algo raro que se ve o se oye sin palabra: un zoom extraño, alguien que aparece, un golpe, una respiración).
+    Para un <b>fragmento</b> del video: pausa donde empieza y presiona «Inicio del fragmento»; luego pausa donde termina y elige qué pasa. Puedes decir si es el sonido, la imagen o los dos.
     Al terminar: «Copiar correcciones» y pégalas en el chat.</p>
     <p id="objetivo" class="ayuda"></p>
+    <button class="b-ini" onclick="inicio()">⏮ Inicio del fragmento</button>
+    <select id="que" title="Qué afecta (en el video)"><option value="">sonido e imagen</option><option value="sonido">solo el sonido</option><option value="imagen">solo la imagen</option></select><br>
     <button class="b-cortar" onclick="marcar('cortar')">✂ Cortar</button>
     <button class="b-mal" onclick="marcar('mal')">🔇 Se oye mal</button>
     <button class="b-nota" onclick="marcar('nota')">✎ Nota</button>
@@ -119,23 +123,30 @@ function enVideo() {  // la palabra que suena donde está el video (o la más ce
   }
   return mejor ? [mejor] : [];
 }
+let ini = null;  // inicio del fragmento (segundo del video), si lo hay
+function inicio() { ini = +v.currentTime.toFixed(2); v.pause(); window.getSelection().removeAllRanges(); objetivo(); }
+function enRango(a, b) { return todas.filter(s => +s.dataset.t1 > a && +s.dataset.t0 < b); }
 function objetivo() {
   const ws = seleccionadas(), o = document.getElementById('objetivo');
   if (ws) o.innerHTML = 'Vas a marcar <b>en el texto</b>: «' + ws.map(s => s.textContent).join(' ').slice(0, 80) + '»';
+  else if (ini !== null) o.innerHTML = 'Vas a marcar <b>el fragmento del video</b> de ' + mmss(Math.min(ini, v.currentTime)) + ' a ' + mmss(Math.max(ini, v.currentTime)) +
+    ' (pausa donde termina y elige) <button class="x" onclick="ini=null;objetivo()">✕ quitar inicio</button>';
   else { const w = enVideo(); o.innerHTML = 'Vas a marcar <b>en el video</b>, en ' + mmss(v.currentTime) + (w.length ? ' (suena «' + w[0].textContent + '»)' : ''); }
 }
 document.addEventListener('selectionchange', objetivo);
 function marcar(tipo) {
-  let ws = seleccionadas(), desde = 'texto', t;
+  let ws = seleccionadas(), desde = 'texto', t, fin = null;
+  const que = document.getElementById('que').value;
   if (ws) t = +ws[0].dataset.t0;
+  else if (ini !== null) { desde = 'video'; v.pause(); t = Math.min(ini, +v.currentTime.toFixed(2)); fin = Math.max(ini, +v.currentTime.toFixed(2)); ws = enRango(t, fin); }
   else { ws = enVideo(); desde = 'video'; t = +v.currentTime.toFixed(2); v.pause(); }
-  const donde = desde === 'texto' ? '«' + ws.map(s => s.textContent).join(' ') + '»' : 'el video en ' + mmss(t);
+  const donde = desde === 'texto' ? '«' + ws.map(s => s.textContent).join(' ') + '»' : (fin !== null ? 'el fragmento ' + mmss(t) + '–' + mmss(fin) : 'el video en ' + mmss(t));
   const nota = tipo === 'nota' ? prompt('¿Qué hay que hacer en ' + donde + '?') : (prompt('Comentario (opcional) sobre ' + donde + ':') || '');
   if (nota === null || (tipo === 'nota' && !nota)) return;
   const piezas = {};
   for (const s of ws) (piezas[s.dataset.pid] = piezas[s.dataset.pid] || []).push(+s.dataset.i);
-  marcas.push({ tipo, t, desde, texto: ws.map(s => s.textContent).join(' '), piezas, nota });
-  guardar(); window.getSelection().removeAllRanges();
+  marcas.push({ tipo, t, fin, desde, que: desde === 'video' ? que : '', texto: ws.map(s => s.textContent).join(' '), piezas, nota });
+  ini = null; guardar(); window.getSelection().removeAllRanges(); objetivo();
 }
 function guardar() {
   marcas.sort((a, b) => a.t - b.t);
@@ -145,7 +156,7 @@ function guardar() {
 const NOMBRES = { cortar: 'CORTAR', mal: 'SE OYE MAL', nota: 'NOTA', sonido: 'SONIDO' };
 function linea(m, n) {
   const pz = Object.entries(m.piezas).map(([p, is]) => p + ' ' + Math.min(...is) + (is.length > 1 ? '–' + Math.max(...is) : '')).join(', ');
-  return n + '. ' + NOMBRES[m.tipo] + ' · ' + mmss(m.t) + (m.desde === 'video' ? ' (en el video' + (m.texto ? ', suena' : '') : '') + (m.texto ? (m.desde === 'video' ? ' «' + m.texto + '»)' : ' · «' + m.texto + '»') : (m.desde === 'video' ? ')' : '')) + (pz && !D.reel ? ' · [' + pz + ']' : '') + (m.nota ? ' · ' + m.nota : '') +
+  return n + '. ' + NOMBRES[m.tipo] + (m.que ? ' ' + (m.que === 'sonido' ? 'SOLO EL SONIDO' : 'SOLO LA IMAGEN') : '') + ' · ' + mmss(m.t) + (m.fin != null ? '–' + mmss(m.fin) : '') + (m.desde === 'video' ? ' (en el video' + (m.texto ? ', suena' : '') : '') + (m.texto ? (m.desde === 'video' ? ' «' + m.texto + '»)' : ' · «' + m.texto + '»') : (m.desde === 'video' ? ')' : '')) + (pz && !D.reel ? ' · [' + pz + ']' : '') + (m.nota ? ' · ' + m.nota : '') +
 ''; 
 }
 function pintar() {

@@ -64,7 +64,7 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
   <div class="panel">
     <h1>Revisión · __NOMBRE__</h1>
     <p class="ayuda">Clic en una palabra = el video salta ahí. Para marcar hay dos formas: <b>en el texto</b>, selecciona la palabra o la frase con el mouse;
-    <b>en el video</b>, páusalo en el punto (sirve para lo que se ve o se oye sin palabra: Mónica en pantalla, un golpe, una respiración). Luego elige qué pasa.
+    <b>en el video</b>, páusalo en el punto (sirve para algo raro que se ve o se oye sin palabra: un zoom extraño, alguien que aparece, un golpe, una respiración). Luego elige qué pasa.
     Al terminar: «Copiar correcciones» y pégalas en el chat.</p>
     <p id="objetivo" class="ayuda"></p>
     <button class="b-cortar" onclick="marcar('cortar')">✂ Cortar</button>

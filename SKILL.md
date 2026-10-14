@@ -214,7 +214,10 @@ fuentes, cuál lleva cada una). Espera su aprobación o sus correcciones antes d
 npx remotion render Reel out/<NOMBRE_CORTO>_REEL_v<N>.mp4 --codec=h264 --crf=18 --concurrency=4
 FF="$FF" PY="$PY" ./scripts/verify.sh out/<NOMBRE_CORTO>_REEL_v<N>.mp4    # 1080x1920, −14 LUFS, re-transcripción
 "$PY" scripts/voz-sola.py                                     # re-transcripción de la voz editada sin efectos
+"$PY" scripts/bordes.py out/<NOMBRE_CORTO>_REEL_v<N>.mp4 [factor]   # 3 primeros cuadros de cada corte → out/…_BORDES_N.jpg
 ```
+**Revisa siempre los bordes de cada corte** con `bordes.py` (Janeth, 13 oct): algo raro de 1 o 2 cuadros al empezar un plano
+(un salto de zoom, una toma que no era) no se ve en la hoja de fotogramas. Si hay algo, corre el comienzo del tramo y vuelve a exportar.
 Si `verify.sh` oye una palabra distinta pero `voz-sola.py` la oye bien, es un efecto o la música encima,
 no un corte. **Acelerar** (si lo pide): exporta a `work/base_vN.mp4` con crf 16 y luego
 `FF="$FF" ./scripts/speed.sh work/base_vN.mp4 out/<NOMBRE_CORTO>_REEL_vN.mp4 <factor>` (todo sincronizado,

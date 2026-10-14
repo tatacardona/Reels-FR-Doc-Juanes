@@ -59,6 +59,7 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
 .w.cortar { background:var(--marca); text-decoration:line-through; } .w.mal { background:var(--mal); } .w.nota { background:var(--nota); }
 .g { display:inline-block; min-width:.75em; height:1.15em; vertical-align:-.2em; border-radius:4px; cursor:pointer; text-align:center; font-size:11px; line-height:1.15em; color:transparent; }
 .g:hover { background:var(--suave); color:var(--tinta); }
+.g.fin { min-width:1.6em; color:var(--suave); }  /* espacio entre un renglón y el siguiente */
 .g.sel { background:var(--azul); color:#fff; } .g.cortar { background:var(--marca); color:var(--tinta); } .g.mal { background:var(--mal); color:var(--tinta); } .g.nota { background:var(--nota); color:var(--tinta); }
 @media (max-width:800px) { .fila { flex-direction:column; } video { width:100%; } }
 </style></head>
@@ -119,7 +120,11 @@ for (const b of D.bloques) {
       const s = document.createElement('span'); s.className = 'w'; s.textContent = txt;
       s.dataset.pid = b.pid; s.dataset.i = i; s.dataset.t0 = t0; s.dataset.t1 = t1;
       s.onclick = () => { if (!String(window.getSelection()).trim()) { soltarHueco(); ir(t0 + 0.03); resaltar(s); objetivo(); } };
-      if (todas.length) { p.appendChild(document.createTextNode(' ')); p.appendChild(hueco(todas[todas.length - 1], s)); p.appendChild(document.createTextNode(' ')); }
+      if (todas.length) {  // el espacio entre renglones va al final del renglón anterior (después de su última palabra)
+        const ant = todas[todas.length - 1], dest = ant.parentNode === p ? p : ant.parentNode, g = hueco(ant, s);
+        if (dest !== p) g.classList.add('fin');
+        dest.appendChild(document.createTextNode(' ')); dest.appendChild(g); if (dest === p) p.appendChild(document.createTextNode(' '));
+      }
       p.appendChild(s); todas.push(s);
     }
     G.appendChild(p);

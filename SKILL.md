@@ -77,9 +77,12 @@ rango y el total, y aclara que es aproximado:
 | Propuestas visuales (fuentes, color, luz) con muestras | 8-15 | US$ 1-1,5 |
 | Armar la edición, texto para aprobar y exportar la v1 | 20-35 | US$ 2-3 |
 | Cada ronda de cambios + nueva exportación | 10-25 | US$ 1-2,5 |
+| Desde la 4.ª ronda (la conversación ya es larga y cada paso la relee) | 15-30 | US$ 2-3 cada una |
+| Cambios a herramientas o al skill pedidos en el camino | 10-25 | US$ 1-3 cada uno |
 | Buscar y ajustar música | 10-20 | US$ 1-2 |
 | 3 portadas | 8-15 | US$ 1-1,5 |
 | **Video completo típico** (plan, v1, 2 rondas, portadas) | **80-130** | **US$ 7-12** |
+| *Medido en MEDICO_QUE (7 versiones, traslape de frases, efectos de voz, 3 cambios a la herramienta de revisión)* | *239* | *US$ 19,75* |
 
 Con plan Team/Enterprise la factura puede ser distinta; la cifra sirve para comparar opciones. Si la
 persona quiere ahorrar, ofrécele alternativas concretas (menos rondas, sin música, sin portadas

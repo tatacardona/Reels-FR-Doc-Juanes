@@ -27,6 +27,7 @@
 | Quedan pausas entre comas aunque `max_pause` es bajo | Whisper estira la palabra sobre el silencio y la protección de palabras lo conservaba | Resuelto: solo se protegen micro-pausas < `inner_max` (0,15 s). Si una palabra sale "partida", corrige su inicio con `word_fixes`. |
 | Los listados de Chosic cuelgan el navegador integrado | Página pesada | Cierra la pestaña, abre otra y entra directo a `/download-audio/<id>/`. |
 | "Sonidito extraño" en algunos cortes | Trozos de voz < 0,1 s que se borraban, inicios suaves ("y", "J") comidos, fragmentos sueltos, o un `src` que entra en la cola de otra toma o en un chasquido | Resuelto en `build-edit.py` (bordes extendidos, `min_piece`, AVISO corte sobre voz). Revisa cada AVISO con `energy.py zoom`. |
+| El render se cae cerca del final: "Failed to fetch …/proxy?src=…video-vertical.mp4 … disk space is low" | El lector de video de Remotion se cerró (carga alta), aunque haya espacio en disco | Vuelve a exportar con `--concurrency=3`. |
 
 ## Windows (Git Bash)
 La primera vez que se use en Windows es un piloto: anota aquí lo que falle y cómo se resolvió (y avísale a Janeth).

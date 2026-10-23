@@ -177,7 +177,7 @@ Base: `assets/edit-config.example.json`. Todos los tiempos en segundos del video
   `"$PY" scripts/head-track.py <inicio> <fin>` + `follow_head: true` dan su posición cuadro a cuadro (`track`).
 - `sounds`: `[[archivo, seg, volumen, desfase_seg]]`; `shakes`: segundos con sacudida (impactos).
 - `end_push: {at, to}`: acercamiento suave a la cara (~1,6) al final, sin fundido a negro. **Es opcional:** no todos los
-  videos lo llevan; propónlo en el plan (con acercamiento o con plano fijo) y que la persona decida.
+  videos lo llevan y varía con cada diseño; no preguntes por él en el plan: úsalo solo si la persona lo pide.
   `end_hold`: segundos extra al final.
 - `speed`: si pide acelerar (ver Paso 7).
 - **Fuente base** (palabras normales): Montserrat Black 900, blanca con borde negro, salvo que la marca
@@ -230,16 +230,19 @@ viñetas cortas y deja la copia en `$DESCARGAS`.
 **Página de revisión con cada versión** (Janeth, 13 oct): después del render,
 `"$PY" scripts/revision.py out/<NOMBRE_CORTO>_REEL_v<N>.mp4 [factor de speed.sh]` → `out/<NOMBRE_CORTO>_REEL_v<N>_REVISION.html`
 junto al video (ábrela: `open` en Mac, `start` en Windows; es local, no se publica). Si el proyecto no tiene el script, cópialo de
-`~/.claude/skills/editar-reel-fr/scripts/`. Tiene el video arriba y el texto abajo (los subtítulos), sincronizado: la palabra que suena
-se ilumina y un clic salta ahí y deja el video en pausa (sigue solo con play). Ella marca **en el texto** (selecciona la palabra o frase), **un espacio** entre dos
-palabras o entre fragmentos (clic en el hueco: «Cortar espacio» = silencio muy largo, «Sonido raro en el espacio»; mídelo con `energy.py zoom`) o **en el video** (lo pausa en el punto: algo raro que se ve o se oye sin palabra,
-como un zoom extraño, alguien que aparece o un golpe), o un **fragmento** del video («Inicio del fragmento» y «Fin del
-fragmento»), y dice si afecta el sonido, la imagen o los dos; elige «Cortar», «Se oye mal» o «Nota»; «Copiar correcciones» le da una lista con el
-segundo del video y la frase, que pega en el chat. Cada marca se corrige como «Corta el segundo X» (ver Pedidos frecuentes).
+`~/.claude/skills/editar-reel-fr/scripts/`. Usa la misma interfaz que el corrector de los videos 10FR (Janeth, 22 oct,
+UNO_DE_CUATRO): en pantalla ancha, el video vertical a la izquierda a toda la altura, los botones al lado y el texto (los subtítulos) en
+su propia columna con scroll y letra grande; sincronizado: la palabra que suena se ilumina y un clic salta ahí y deja el video en pausa.
+Ella marca **en el texto** (selecciona la palabra o frase), **un espacio** entre dos palabras, al inicio o al final de un renglón (clic en el
+hueco: «Cortar espacio» = silencio muy largo; mídelo con `energy.py zoom`) o **en el video** (lo pausa en el punto), y elige «Cortar»,
+«Se oye mal», «🔊 Sonido» (ruido, golpe, respiración o sílaba suelta) o «Nota»; «Copiar correcciones» le da una lista con el segundo del
+video y la frase, que pega en el chat. Cada marca se corrige como «Corta el segundo X» (ver Pedidos frecuentes). Si se mejora el corrector
+de 10FR, pasa también la mejora a este (comparten la parte de la página; cambia solo cómo se leen los datos).
 Genérala con el `edit.json` de esa versión (si cambias el edit antes de que ella revise, deja de coincidir).
 
-## Paso 8: Portadas (siempre, sin que lo pidan)
-Con la primera versión del video (o cuando la apruebe), **propónle 3 portadas** distintas:
+## Paso 8: Portadas (solo si el video las lleva)
+**En el plan pregunta si el video necesita portada**: no todos la llevan (p. ej. los videos de pauta, no).
+Si la lleva, con la primera versión del video (o cuando la apruebe) **propónle 3 portadas** distintas:
 - Fotogramas con buena expresión (ojos abiertos, sonrisa o gesto que invite), revisados antes en una tira
   de miniaturas. Cada opción con un fotograma y un ángulo de texto distinto (el gancho, la frase emotiva,
   la invitación final), siempre fiel a lo que dice el video. **Poco texto**: una frase corta.
@@ -283,6 +286,11 @@ a Janeth y guárdala ahí; prueba con `"$PY" scripts/avisar-chat.py <dj|fr> --pr
   habla: ofrécele acelerar 5-8 % o quitar una frase.
 - **"Se cortan las palabras":** primero el audio (un expansor/compuerta rápida suena a palabras
   cortadas), luego los cortes (`AVISO` de `build-edit.py`, final de frase, `tail`).
+- **"Se oyen pájaros / ruido de exterior":** limpieza más fuerte (la «C» que Janeth eligió en UNO_DE_CUATRO): DeepFilterNet
+  dos veces (`deepFilter` sobre `work/df/…_DeepFilterNet3.wav`) + la cadena de `audio.sh` con `afftdn=nf=-45:nr=10:tn=1,lowpass=f=9000`
+  y compuerta `agate=threshold=0.02:ratio=3:range=0.06:attack=4:release=180:knee=6`. Hazle antes las 3 pruebas A/B/C de 15 s.
+  **Mide los cortes sobre la voz de la limpieza normal** (`work/voz16k.wav` de esa voz): sobre la limpieza fuerte los silencios
+  quedan casi en cero y `energy.py` se descalibra (el video se alarga y salen AVISOS falsos).
 - **"Tiene eco":** ya lo corrige `audio.sh`. **No** lo endurezcas con un expansor rápido. Si pide más o
   menos limpieza, hazle 3 pruebas cortas (A/B/C, 15 s, solo voz, en Descargas) y que elija con el oído.
 - **"Está oscuro":** sube el punto 0.4/0.5 de la curva de `prep.sh`.

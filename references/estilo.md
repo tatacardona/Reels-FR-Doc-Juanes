@@ -24,7 +24,8 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
 - **Escaleras de zoom** en ideas que escalan, hasta ~1.8x en la palabra culminante.
 - Preguntas clave o frases de impacto: primer plano (1.5-1.6). Zooms siempre hacia la cara (`FACE_ORIGIN`).
 - **Final nítido, sin fundido a negro.** El acercamiento suave a la cara (`end_push`) es una opción, no la regla:
-  "no todos los videos terminan haciendo zoom" (Janeth, MEDICO_QUE). Se propone en cada plan.
+  "no todos los videos terminan haciendo zoom" (Janeth, MEDICO_QUE). Varía con cada diseño: no se pregunta en el plan;
+  solo se usa si lo piden (Janeth, UNO_DE_CUATRO).
 
 ## Subtítulos
 - Normales: Montserrat 900, 82 px, blancas. **Sin mayúsculas sostenidas:** minúsculas con mayúscula al

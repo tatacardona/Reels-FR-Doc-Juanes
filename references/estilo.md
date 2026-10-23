@@ -36,6 +36,10 @@ video nuevo no encaja en una regla, decide con el espíritu de la regla.
   borde oscuro grueso, entrada con rebote; ~1 cada 1,5-2 s. **Fuente y color se proponen por video según
   el mood**: una o dos fuentes, mismo color o distinto. Le han gustado: Anton (enérgico), Montserrat
   cursiva (inspirador), Baskerville cursiva + Lilita One en verde limón (nostálgico/emotivo).
+  **Campaña FR Black Friday + 10 años** (UNO_DE_CUATRO, LISTA_VIP): subtítulos en Plus Jakarta Sans 800;
+  resaltado 1 en Plus Jakarta Sans 800 verde neón `#A8E45C`; resaltado 2 (`"alt"`) en Bricolage Grotesque 800
+  morado `#B44CF0`, sin pastilla de fondo (se descartó la Raleway delgada en pastilla morada). Las dos con
+  borde oscuro `#16052B`. Sin efectos de luz de colores en el video.
   **El color contrasta con la pared** (nunca el mismo tono del fondo).
 - **Nunca tapan la cara:** desde el 63 % de la altura hacia abajo.
 

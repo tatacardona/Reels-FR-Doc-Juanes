@@ -23,6 +23,9 @@ Para música, `references/musica.md`.
   Define la carpeta del proyecto y el espacio de Google Chat donde se avisa (Paso 9).
 - **Nombres:** en el plan propón (o pídele) un **NOMBRE_CORTO** en mayúsculas con guiones bajos
   (p. ej. `JUANCHO_PASASTE`); es también el nombre de la carpeta del proyecto.
+  - **En cuanto apruebe el nombre (aunque sea al aprobar el plan que lo propone), renombra el chat con él**
+    (`set_session_title` "self" → `NOMBRE_CORTO`) en esa misma respuesta, antes de crear el proyecto o seguir
+    con cualquier otro paso (Janeth, 23 oct, MAS_SIMULACROS).
   - Mientras se revisa: cada versión con número para que no vea una vieja ("no percibo cambios"):
     `NOMBRE_CORTO_REEL_v2.mp4`, `NOMBRE_CORTO_PORTADA_1.jpg`… En Descargas, solo la última versión.
   - **Cuando apruebe la versión definitiva**, renómbralos quitando todo lo demás, incluido el

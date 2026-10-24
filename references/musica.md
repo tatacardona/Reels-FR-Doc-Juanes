@@ -58,6 +58,8 @@
 | Guion 7 (MEDICO_QUE) | Chillwave Flow (Full Version) | khemrajdotin (Pixabay) | `pixabay.com/music/synthwave-chillwave-flow-full-version-245704/` |
 | UNO_DE_CUATRO (FR, Black Friday + 10 años) | Chill Reel | Kulakovka (Pixabay) | `pixabay.com/music/house-chill-reel-570198/` |
 | IMG_8031 (FR, Black Friday + 10 años) | Happy Jazz Old Cafe | ElectroAnimals (Pixabay) | `pixabay.com/music/modern-jazz-happy-jazz-old-cafe-600362/` |
+| MAS_SIMULACROS (FR, Black Friday + 10 años) | Fragments of Forever | HoggyArt (Pixabay) | `pixabay.com/music/pop-fragments-of-forever-297800/` |
+| ACCESO_R1 (FR, Black Friday + 10 años) | Sapphire Dreams | HoggyArt (Pixabay) | `pixabay.com/music/pop-sapphire-dreams-274884/` |
 | MAS_SIMULACROS (FR, IMG_8034, 10 años + lista VIP) | Fragments of Forever (con voz) | HoggyArt (Pixabay) | `pixabay.com/music/pop-fragments-of-forever-297800/` |
 
 Probadas y rechazadas por Janeth (no volver a proponer): Ghost Surf Rock (Loyalty Freak Music),

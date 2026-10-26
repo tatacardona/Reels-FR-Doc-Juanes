@@ -2,7 +2,8 @@
   dj  Doc Juanes          → bot «Aprobaciones Doc Juanes» (~/.reels-bot-dj.json) o webhook ~/.reels-fr-webhook-dj
   fr  Futuros Residentes  → bot «Aprobaciones FR»         (~/.reels-bot-fr.json) o webhook ~/.reels-fr-webhook-fr
 Con el bot, el aviso es una tarjeta con ✅ Aprobado y ✏️ Corregir; las respuestas quedan en la hoja del bot y se leen
-con --respuestas. Sin el archivo del bot (o con --webhook, o si el bot falla) se manda el texto por el webhook de siempre.
+con --respuestas. Desde el 25 oct los videos se confirman solo por la app (bot): sin el archivo del bot o si falla, no se manda nada;
+--webhook queda solo para un aviso de texto que Janeth pida expresamente.
 Las URL, secretos y webhooks NUNCA van en este repositorio (Janeth los comparte en privado; variables GCHAT_WEBHOOK_DJ/FR).
 Uso: "$PY" scripts/avisar-chat.py <dj|fr> NOMBRE_CORTO [--video ENLACE] [--portada ENLACE] [--nota "texto"] [--webhook]
      "$PY" scripts/avisar-chat.py <dj|fr> --respuestas [--pieza NOMBRE_CORTO]   (qué respondieron en la tarjeta)
@@ -55,14 +56,18 @@ if a.respuestas:
 if not a.prueba and not a.nombre:
     sys.exit("Falta el NOMBRE_CORTO del video")
 
+if not a.prueba and not a.webhook and not BOT.exists():
+    # Desde el 25 oct la confirmación de videos se hace por la app, ya no por el webhook (Janeth)
+    sys.exit(f"Falta el archivo del bot de {MARCAS[a.marca]} (~/{BOT.name}): pídeselo a Janeth. Los videos ya no se avisan por el webhook.")
+
 if BOT.exists() and not a.prueba and not a.webhook:
     contexto = "\n".join(x for x in [a.nota, f'Portada: <a href="{a.portada}">ver portada</a>' if a.portada else ""] if x)
     try:
         bot({"accion": "enviar", "pieza": a.nombre, "enlace": a.video or a.portada, "contexto": contexto, "para": "equipo"})
         print(f"tarjeta enviada al chat de {MARCAS[a.marca]} (bot de aprobación)")
         sys.exit()
-    except Exception as e:  # el webhook queda de respaldo
-        print(f"el bot no respondió ({e}); mando el aviso por el webhook")
+    except Exception as e:  # sin respaldo por webhook: la confirmación es por la app (Janeth, 25 oct)
+        sys.exit(f"el bot no respondió ({e}); no se mandó nada. Vuelve a intentarlo o avísale a Janeth (no uses el webhook).")
 
 url = os.environ.get(f"GCHAT_WEBHOOK_{a.marca.upper()}", "").strip()
 f = Path.home() / f".reels-fr-webhook-{a.marca}"

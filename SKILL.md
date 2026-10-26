@@ -288,14 +288,15 @@ Cuando apruebe el video y ya estén renombrados `NOMBRE_CORTO_REEL.mp4` y `NOMBR
    ```bash
    "$PY" scripts/avisar-chat.py <dj|fr> NOMBRE_CORTO --video "<enlace>" --portada "<enlace>" [--nota "<texto>"]
    ```
-Si existe `~/.reels-bot-<dj|fr>.json`, el aviso sale como **tarjeta del bot de aprobación** de la marca
-(«Aprobaciones FR» o «Aprobaciones Doc Juanes») con ✅ Aprobado y ✏️ Corregir; si no existe o el bot falla,
-sale como texto por el webhook (`--webhook` lo fuerza). Lo que respondan queda en la hoja del bot:
+**La confirmación de videos se hace por la app, ya no por el webhook** (Janeth, 25 oct): el aviso sale como **tarjeta del bot de
+aprobación** de la marca («Aprobaciones FR» o «Aprobaciones Doc Juanes») con ✅ Aprobado y ✏️ Corregir. Necesita
+`~/.reels-bot-<dj|fr>.json`; si falta o el bot falla, el script no manda nada: pídele el archivo a Janeth o avísale, **nunca uses
+el webhook** como respaldo (`--webhook` queda solo para un texto que ella pida expresamente). Lo que respondan queda en la hoja del bot:
 **antes de corregir un reel, léelo** con `"$PY" scripts/avisar-chat.py <dj|fr> --respuestas --pieza NOMBRE_CORTO`
 y aplica las observaciones de la última fila «Corregir».
 Los archivos del bot y las URL de los webhooks son secretos y **nunca van en el skill ni en GitHub**: viven en
 `~/.reels-bot-dj.json`, `~/.reels-bot-fr.json`, `~/.reels-fr-webhook-dj` y `~/.reels-fr-webhook-fr`. Si falta uno,
-dile que se lo pida a Janeth y guárdalo ahí; prueba el webhook con `"$PY" scripts/avisar-chat.py <dj|fr> --prueba`.
+dile que se lo pida a Janeth y guárdalo ahí.
 
 ## Pedidos frecuentes
 - **"Corta el segundo X":** mapea X en `edit.json` → tramo y frase; re-transcribe ese pedazo; corrige

@@ -15,6 +15,17 @@ Para música, `references/musica.md`.
   (plan inicial, cada ronda de cambios, portadas, música). El resumen lleva **dos criterios**: el
   audiovisual (qué se hará, paso a paso) y el **financiero**: la proyección de consumo de tokens (ver
   "Consumo de tokens"). Puedes preparar y transcribir el crudo antes, para que el plan sea concreto.
+- **Sé lo más autónoma posible** (Janeth, 25 oct): haz tú todo lo que puedas hacer desde aquí, sin pedírselo a la persona:
+  descargar archivos, limpiar o reconstruir audios (Adobe Podcast «Enhance Speech»: con Claude in Chrome, en su sesión, copiando el
+  archivo a tu carpeta temporal para subirlo con `file_upload` y descargando con **Download**), editar audios, guardar y mover archivos
+  en sus carpetas, abrir videos, imágenes y páginas (`open` en Mac, `start` en Windows). Lo único que se le pide es la **aprobación para
+  que lo hagas** (el plan, el contenido, exportar, publicar o avisar) y lo que de verdad no puedes hacer tú (oír). Si una herramienta
+  no está disponible en ese computador (p. ej. Claude in Chrome), díselo y pídele solo ese paso.
+- **Si solo cambia la música (volumen, otra parte de la canción) o los efectos de sonido, no vuelvas a exportar el video**
+  (Janeth, 25 oct): `"$PY" scripts/solo-audio.py out/<NOMBRE_CORTO>_REEL_vN.mp4 out/<NOMBRE_CORTO>_REEL_vN+1.mp4 [--factor <el de speed.sh>]`
+  cambia solo el audio sobre la imagen ya exportada y corrige el desfase del codificador. Exporta completo solo si cambió la imagen
+  (una palabra, un corte, un subtítulo, un sticker). Y en general **busca siempre la forma más eficiente de editar**: toca solo lo que
+  cambió y reutiliza lo que ya está hecho; díselo en el plan, con el tiempo que se ahorra.
 - Tú no puedes escuchar audio. Verifica con mediciones y re-transcripciones, y pídele que escuche
   lo subjetivo: efectos de sonido, volumen de la música y cortes muy apretados.
 - Muéstrale fotogramas y el MP4 en cada versión. Cuando pida un cambio, ubícalo en el segundo del

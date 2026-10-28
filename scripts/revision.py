@@ -61,6 +61,13 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
 .g:hover { background:var(--suave); color:var(--tinta); }
 .g.fin { min-width:1.6em; color:#b8a777; font-weight:700; }  /* espacio al final del renglón: más oscuro que los demás (Janeth, 18 oct, ALEX_LOPEZ_10FR: con el color --suave no se veía y no lo podía marcar) */
 .g.sel { background:var(--azul); color:#fff; } .g.cortar { background:var(--marca); color:var(--tinta); } .g.mal { background:var(--mal); color:var(--tinta); } .g.nota { background:var(--nota); color:var(--tinta); } .g.sonido { background:var(--sonido); color:var(--tinta); }
+.b-mic { background:var(--agua); color:#fff; } .b-mic.oyendo { background:#d9534f; animation:late 1s infinite; }
+@keyframes late { 50% { opacity:.6; } }
+.dialogo { position:fixed; inset:0; z-index:20; background:rgba(31,53,80,.35); display:flex; align-items:center; justify-content:center; padding:16px; }
+.dialogo > div { background:var(--fondo); border-radius:12px; padding:16px; width:min(560px, 100%); box-shadow:0 10px 40px rgba(0,0,0,.25); }
+.dialogo p { margin:0 0 8px; font-size:15px; }
+.dialogo textarea { width:100%; font:inherit; font-size:15px; padding:8px; border:1px solid var(--suave); border-radius:8px; background:#fffaf0; color:var(--tinta); resize:vertical; }
+.dialogo .botones { display:flex; align-items:center; margin-top:8px; }
 @media (max-width:800px) { body { display:block; height:auto; overflow:visible; } header { position:sticky; height:auto; border-right:0; } main { height:auto; overflow:visible; } .fila { flex-direction:column; } video { width:100%; height:auto; max-width:none; max-height:70vh; } }
 /* Reel vertical (Janeth, UNO_DE_CUATRO): video a la izquierda a toda la altura, botones al lado y el texto en su propia columna
    con scroll, grande y cómodo; antes el encabezado fijo con el video se comía la pantalla y el texto quedaba en una franja mínima */
@@ -85,6 +92,7 @@ main { max-width:900px; margin:0 auto; padding:12px 16px 120px; }
     <button class="b-mal" onclick="marcar('mal')">🔇 Se oye mal</button>
     <button class="b-sonido" onclick="marcar('sonido')" title="Un ruido, golpe, respiración o sílaba suelta que hay que quitar: pausa el video justo ahí">🔊 Sonido</button>
     <button class="b-nota" onclick="marcar('nota')">✎ Nota</button>
+    <button class="b-mic" onclick="marcar('nota', true)" title="Pausa y escribe lo que dices como una nota en ese punto (o en lo que hayas elegido)">🎤 Hablar</button>
     <button class="b-copiar" onclick="copiar()">Copiar correcciones</button>
     <ol id="marcas"></ol>
   </div>
@@ -197,11 +205,48 @@ function objetivo() {
   else { const w = enVideo(); o.innerHTML = 'Vas a marcar <b>en el video</b>, en ' + mmss(v.currentTime) + (w.length ? ' (suena «' + w[0].textContent + '»)' : ''); }
 }
 document.addEventListener('selectionchange', objetivo);
-function marcar(tipo) {
+// 🎤 Los comentarios se escriben o se dicen en voz alta (Janeth, 28 oct, BLOOPERS_10FR v2)
+const Reco = window.SpeechRecognition || window.webkitSpeechRecognition;
+function microfono(campo, boton) {  // conecta un botón 🎤 a un campo; devuelve con qué apagarlo
+  if (!Reco) { boton.style.display = 'none'; return () => {}; }
+  let r = null;
+  const apagar = () => { if (r) { r.onend = null; try { r.stop(); } catch (e) {} r = null; } boton.textContent = '🎤 Hablar'; boton.classList.remove('oyendo'); };
+  boton.onclick = e => { e.preventDefault(); e.stopPropagation();
+    if (r) return apagar();
+    const base = campo.value.trim() ? campo.value.trim() + ' ' : '';
+    r = new Reco(); r.lang = 'es-CO'; r.continuous = true; r.interimResults = true;
+    r.onresult = ev => { campo.value = base + Array.from(ev.results).map(x => x[0].transcript.trim()).join(' '); };
+    r.onerror = ev => { if (ev.error === 'not-allowed' || ev.error === 'service-not-allowed') alert('El navegador no dejó usar el micrófono: permítelo para esta página e inténtalo otra vez.'); apagar(); };
+    r.onend = apagar;
+    r.start(); boton.textContent = '⏹ Listo'; boton.classList.add('oyendo'); campo.focus();
+  };
+  return apagar;
+}
+function preguntar(texto, hablar) {  // como prompt(), pero con 🎤; Enter acepta, Shift+Enter baja de renglón, Esc cancela
+  return new Promise(listo => {
+    const d = document.createElement('div'); d.className = 'dialogo';
+    d.innerHTML = '<div><p></p><textarea rows="3"></textarea><div class="botones"><button class="b-mic">🎤 Hablar</button><span style="flex:1"></span><button class="b-ini">Cancelar</button><button class="b-copiar">Aceptar</button></div></div>';
+    d.querySelector('p').textContent = texto;
+    const campo = d.querySelector('textarea'), [mic, no, ok] = d.querySelectorAll('button');
+    const apagar = microfono(campo, mic);
+    const cerrar = valor => { apagar(); d.remove(); listo(valor); };
+    ok.onclick = () => cerrar(campo.value.trim());
+    no.onclick = () => cerrar(null);
+    campo.onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ok.click(); } if (e.key === 'Escape') no.click(); };
+    document.body.appendChild(d); campo.focus();
+    if (hablar) mic.click();
+  });
+}
+async function comentario(tipo, donde, hablar) {
+  if (tipo === 'sonido') return preguntar('¿Qué sonido hay en ' + donde + '? (opcional: «golpe», «respiración», «sílaba suelta»…)', hablar);
+  if (tipo === 'nota') return preguntar('¿Qué hay que hacer en ' + donde + '?', hablar);
+  return (await preguntar('Comentario (opcional) sobre ' + donde + ':', hablar)) || '';
+}
+async function marcar(tipo, hablar) {
   let ws = seleccionadas(), desde = 'texto', t, hasta = null;
   if (!ws && gapSel) {
     const g = gapSel, donde = 'el espacio entre «' + g._prev.textContent + '» y «' + g._sig.textContent + '»';
-    const nota = tipo === 'sonido' ? prompt('¿Qué sonido hay en ' + donde + '? (opcional: «golpe», «respiración», «sílaba suelta»…)', '') : tipo === 'nota' ? prompt('¿Qué hay que hacer en ' + donde + '?') : (prompt('Comentario (opcional) sobre ' + donde + ':') || '');
+    const nota = await comentario(tipo, donde, hablar);
     if (nota === null || (tipo === 'nota' && !nota)) return;
     const piezas = {};
     for (const s of [g._prev, g._sig]) if (s.dataset.pid) (piezas[s.dataset.pid] = piezas[s.dataset.pid] || []).push(+s.dataset.i);
@@ -213,7 +258,7 @@ function marcar(tipo) {
   else if (ini !== null) { desde = 'video'; v.pause(); [t, hasta] = rango(); ws = enRango(t, hasta); }
   else { ws = enVideo(); desde = 'video'; t = +v.currentTime.toFixed(2); v.pause(); }
   const donde = desde === 'texto' ? '«' + ws.map(s => s.textContent).join(' ') + '»' : (hasta !== null ? 'el fragmento ' + mmss(t) + '–' + mmss(hasta) : 'el video en ' + mmss(t));
-  const nota = tipo === 'sonido' ? prompt('¿Qué sonido hay en ' + donde + '? (opcional: «golpe», «respiración», «sílaba suelta»…)', '') : tipo === 'nota' ? prompt('¿Qué hay que hacer en ' + donde + '?') : (prompt('Comentario (opcional) sobre ' + donde + ':') || '');
+  const nota = await comentario(tipo, donde, hablar);
   if (nota === null || (tipo === 'nota' && !nota)) return;
   const piezas = {};
   for (const s of ws) (piezas[s.dataset.pid] = piezas[s.dataset.pid] || []).push(+s.dataset.i);

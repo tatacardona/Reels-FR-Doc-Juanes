@@ -249,7 +249,7 @@ UNO_DE_CUATRO): en pantalla ancha, el video vertical a la izquierda a toda la al
 su propia columna con scroll y letra grande; sincronizado: la palabra que suena se ilumina y un clic salta ahí y deja el video en pausa.
 Ella marca **en el texto** (selecciona la palabra o frase), **un espacio** entre dos palabras, al inicio o al final de un renglón (clic en el
 hueco: «Cortar espacio» = silencio muy largo; mídelo con `energy.py zoom`) o **en el video** (lo pausa en el punto), y elige «Cortar»,
-«Se oye mal», «🔊 Sonido» (ruido, golpe, respiración o sílaba suelta) o «Nota»; «Copiar correcciones» le da una lista con el segundo del
+«Se oye mal», «🔊 Sonido» (ruido, golpe, respiración o sílaba suelta) o «Nota»; cada comentario se puede escribir o **dictar con 🎤 Hablar** (voz del navegador, es-CO; el botón 🎤 de arriba pausa y crea una nota dictada en ese punto) (Janeth, 28 oct); «Copiar correcciones» le da una lista con el segundo del
 video y la frase, que pega en el chat. Cada marca se corrige como «Corta el segundo X» (ver Pedidos frecuentes). Si se mejora el corrector
 de 10FR, pasa también la mejora a este (comparten la parte de la página; cambia solo cómo se leen los datos).
 Genérala con el `edit.json` de esa versión (si cambias el edit antes de que ella revise, deja de coincidir).

@@ -70,3 +70,4 @@
 Probadas y rechazadas por Janeth (no volver a proponer): Ghost Surf Rock (Loyalty Freak Music),
 Powerful Stasis (Soft and Furious).
 | Guion 6 (NO_RENUNCIES, Doc Juanes) | EONA - Emotional Ambient Pop | Rockot (Pixabay) | `pixabay.com/music/beats-eona-emotional-ambient-pop-351436/` |
+| Guion 10 (EMPIEZA_CREERTELO, Doc Juanes) | Indie Pop | madstock (Pixabay) | `pixabay.com/music/indie-pop-indie-pop-335469/` |

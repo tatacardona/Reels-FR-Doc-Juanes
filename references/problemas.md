@@ -28,6 +28,13 @@
 | Los listados de Chosic cuelgan el navegador integrado | Página pesada | Cierra la pestaña, abre otra y entra directo a `/download-audio/<id>/`. |
 | "Sonidito extraño" en algunos cortes | Trozos de voz < 0,1 s que se borraban, inicios suaves ("y", "J") comidos, fragmentos sueltos, o un `src` que entra en la cola de otra toma o en un chasquido | Resuelto en `build-edit.py` (bordes extendidos, `min_piece`, AVISO corte sobre voz). Revisa cada AVISO con `energy.py zoom`. |
 | El render se cae cerca del final: "Failed to fetch …/proxy?src=…video-vertical.mp4 … disk space is low" | El lector de video de Remotion se cerró (carga alta), aunque haya espacio en disco | Vuelve a exportar con `--concurrency=3`. |
+| Una palabra suena "cortada al inicio" («quin» por «quince») aunque el tramo empieza antes | DeepFilterNet borró la consonante inicial (en la original está a −35 dB, en la limpia a −70) | Comparar energía cada 20 ms original vs. limpia; injertar ~0,1 s de `work/audio48k.wav` con volumen igualado y fundidos de 8 ms (NO_RENUNCIES) |
+| Al quitar una sílaba en mitad de frase, la palabra anterior suena cortada («diciendo» → «diciend-») | El fundido de salida de 2 cuadros de cada tramo cae sobre la voz | `UNIONES_SIN_FUNDIDO` en constants.ts + microfundidos de 8 ms en el WAV; elegir el punto con fragmentos A/B/C/D |
+| Tras quitar una sílaba, desaparece una palabra del subtítulo | Whisper ubicó esa palabra dentro del pedazo quitado | `word_fixes` con el tiempo real de la palabra (fuera del corte) |
+| Las imágenes `<Img>` salen pequeñas aunque les pongas un ancho grande | Tailwind (preflight) pone `max-width: 100%` a las imágenes | `maxWidth: "none", height: "auto"` en el estilo |
+| El recorte de la persona deja restos blancos de pared (codos, entre las piernas) | La silueta de MediaPipe es gruesa | `scripts/recorte-fino.py` (GrabCut + erosión 2 px + suavizado mínimo) |
+| `--props` de `remotion still` falla con valores vacíos en zsh | `for v in "a b c"; set -- $v` no separa palabras en zsh | Pasar los valores a una función `r(){ … $1 $2 $3 …}` |
+| Un bucle `while read` con ffmpeg procesa solo algunos archivos | ffmpeg lee la entrada estándar y se come la lista | `ffmpeg -nostdin` |
 
 ## Windows (Git Bash)
 La primera vez que se use en Windows es un piloto: anota aquí lo que falle y cómo se resolvió (y avísale a Janeth).

@@ -15,6 +15,13 @@ Para música, `references/musica.md`.
   (plan inicial, cada ronda de cambios, portadas, música). El resumen lleva **dos criterios**: el
   audiovisual (qué se hará, paso a paso) y el **financiero**: la proyección de consumo de tokens (ver
   "Consumo de tokens"). Puedes preparar y transcribir el crudo antes, para que el plan sea concreto.
+- **Nunca exportes (ni `remotion render` del Reel ni `solo-audio.py`) sin que la persona lo diga expresamente**
+  (Janeth, 11 nov, NO_RENUNCIES): elegir estilos, portada o canción NO es permiso para exportar, ni que no objete el texto.
+  Prepara todo, muestra fotogramas o muestras, y pregunta «¿Exporto la vN?». Las muestras (fotogramas de prueba,
+  fragmentos de audio, portadas que pidió) sí se pueden generar.
+- **Si una corrección de audio es fina** (una sílaba, un corte en mitad de la voz, una consonante), antes de exportar
+  arma **fragmentos de audio de prueba** (3-4 variantes A/B/C/D + el original, 3 s, solo voz, en Descargas) y que elija
+  con el oído. En NO_RENUNCIES evitó 3 exportaciones fallidas.
 - **Sé lo más autónoma posible** (Janeth, 25 oct): haz tú todo lo que puedas hacer desde aquí, sin pedírselo a la persona:
   descargar archivos, limpiar o reconstruir audios (Adobe Podcast «Enhance Speech»: con Claude in Chrome, en su sesión, copiando el
   archivo a tu carpeta temporal para subirlo con `file_upload` y descargando con **Download**), editar audios, guardar y mover archivos
@@ -143,6 +150,15 @@ La primera transcripción descarga el modelo large-v3-turbo (~1,6 GB): pide perm
    tramos usados; **vuelve a correrlo si cambian los tramos**, o esos cuadros saldrán sin procesar) y se
    activa con `VIDEO_SRC = "video-fondo.mp4"`. Muéstrale antes un fotograma de prueba.
    El estilo lo prefiere **sutil**: desenfoque leve (5), borde muy suave (14) y vitral/bokeh muy tenues.
+4. **Planos cerca sin perder nitidez** (Janeth pidió "planos más cerca", NO_RENUNCIES): si el crudo es 4K y la persona
+   sale de cuerpo entero, saca un encuadre de cintura arriba directo del 4K (sin escalar) y úsalo como `VIDEO_SRC`:
+   `"$FF" -i crudo -vf "transpose=2,crop=1440:2560:<x>:0,fps=25,curves=…(las de prep.sh)" … public/video-cerca.mp4`
+   (x = centro de la cara en el 4K − 720). Luego `FACE_ORIGIN` en la cara (~"50% 33%") y `framings` 1.4-1.85.
+   Ese recorte también deja fuera objetos de los bordes.
+5. **Objetos que estorban** (una mesa en el borde, un conector en la pared): con cámara fija, tápalos con un parche
+   de pared/piso limpio de al lado (`crop` + `overlay`, o `hflip` del trozo vecino) y mira 3 momentos del video
+   antes de aplicarlo a todo. Si el encuadre cercano ya los deja fuera, mejor.
+6. **Marca Doc Juanes:** usa la línea gráfica de `references/docjuanes.md` (subtítulos, dibujos, portadas, logo oficial).
 
 ## Paso 3: Transcribir y mapear
 ```bash
@@ -165,6 +181,14 @@ FF="$FF" PY="$PY" ./scripts/audio.sh   # voz con menos eco y natural (DeepFilter
 "$PY" scripts/sfx-stickers.py          # solo si habrá stickers con sonido
 "$PY" scripts/sfx-tear.py              # solo si habrá foto rasgándose
 ```
+- **La limpieza (DeepFilterNet) puede borrar consonantes del inicio** (la «k» de «quince» en NO_RENUNCIES: «se oye
+  "quin"»). Si piden revisar una palabra que suena mal al empezar, compara cada 20 ms la energía de `work/audio48k.wav`
+  y `public/voz-mejorada.wav`: si la original tiene la consonante y la limpia no, injerta ~0,1 s de la original con el
+  volumen igualado y fundidos de 8 ms (guarda antes `work/voz-mejorada-orig.wav`).
+- **Efectos de sonido reales** (opcional, `SFX_MODE` en `constants.ts`): Openverse (`api.openverse.org/v1/audio/?q=…
+  &license=cc0`) da grabaciones CC0 de Freesound (whoosh, pop, papel). En la prueba A/B Janeth eligió los reales sobre
+  los sintéticos; en ese mismo video luego pidió quitar todos los efectos ("ninguno"). Pregunta en cada video.
+  (Earshot y Real SFX no están instalados: Earshot pide Python ≥ 3.10.)
 
 ## Paso 5: `edit-config.json`: las decisiones editoriales
 Base: `assets/edit-config.example.json`. Todos los tiempos en segundos del video CRUDO:
@@ -173,7 +197,8 @@ Base: `assets/edit-config.example.json`. Todos los tiempos en segundos del video
   tema), `leak` (destello de luz de sol con colores; para videos inspiradores, ver `estilo.md`),
   `flash` (destello blanco). `zoom` fija el plano de un tramo; `steps: [[seg, zoom], …]` es una
   escalera de planos sin cortar el audio. `hold_zoom: true` = un solo plano. `tail: 0.1` = margen
-  extra al final del tramo si el corte se come una consonante final suave.
+  extra al final del tramo si el corte se come una consonante final suave. `head: 0.06` = margen al inicio para que
+  el fundido de 1 cuadro caiga en el silencio y no sobre la primera consonante («quince» sonaba «-ince»).
 - `emphasis`: `[palabra, segundo]` de las palabras dichas con fuerza o clave (~1 cada 1,5-2 s).
 - `word_fixes`: tiempos reales de una palabra. Después confirma que quedó DENTRO del tramo (si cae
   en el silencio previo, desaparece del subtítulo).
@@ -256,6 +281,8 @@ Genérala con el `edit.json` de esa versión (si cambias el edit antes de que el
 
 ## Paso 8: Portadas (solo si el video las lleva)
 **En el plan pregunta si el video necesita portada**: no todos la llevan (p. ej. los videos de pauta, no).
+**Doc Juanes:** usa `CoverDJ` (Juan recortado con IA, logo oficial, papel rasgado, dibujos) de `references/docjuanes.md`
+y ofrece varias fotos de Juan (del video y de su sesión profesional), con la luz mejorada y brazos completos.
 Si la lleva, con la primera versión del video (o cuando la apruebe) **propónle 3 portadas** distintas:
 - Fotogramas con buena expresión (ojos abiertos, sonrisa o gesto que invite), revisados antes en una tira
   de miniaturas. Cada opción con un fotograma y un ángulo de texto distinto (el gancho, la frase emotiva,
@@ -304,6 +331,15 @@ dile que se lo pida a Janeth y guárdalo ahí.
 - **"Más corto / menos silencios":** los valores por defecto ya son apretados. Mide los silencios que
   quedan en la voz editada antes de tocar nada; si casi no hay, lo que queda es el ritmo natural del
   habla: ofrécele acelerar 5-8 % o quitar una frase.
+  **Ojo (NO_RENUNCIES):** aunque `silencedetect` mida ~0,2 s, Janeth siente largos los cambios de frase porque la cola
+  suave de la voz y la respiración cuentan como sonido. Mide cada 10 ms el fin real de la voz de cada tramo y pon el
+  `src` final ~0,05 s después (y el inicio del siguiente ~0,03 s antes); si sale `AVISO corte sobre voz`, da un poco más.
+- **"Quita esta sílaba/palabra" en mitad de una frase** (p. ej. «diciendo **de** que»): parte el tramo en dos alrededor
+  de la sílaba (en cuadros de 0,04 s), pon el cuadro de inicio del segundo en `UNIONES_SIN_FUNDIDO` (constants.ts) y
+  microfundidos de 8 ms en `public/voz-mejorada.wav` en los dos puntos (el fundido de 2 cuadros se comía «-do»). La
+  cola de la vocal de la sílaba quitada suele seguir hasta justo antes de la consonante siguiente: haz fragmentos A/B/C/D
+  para que elija; el transcriptor no oye esas diferencias. Corrige con `word_fixes` la palabra que quede dentro del
+  pedazo quitado, o desaparece del subtítulo.
 - **"Se cortan las palabras":** primero el audio (un expansor/compuerta rápida suena a palabras
   cortadas), luego los cortes (`AVISO` de `build-edit.py`, final de frase, `tail`).
 - **"Se oyen pájaros / ruido de exterior":** limpieza más fuerte (la «C» que Janeth eligió en UNO_DE_CUATRO): DeepFilterNet
@@ -313,7 +349,8 @@ dile que se lo pida a Janeth y guárdalo ahí.
   quedan casi en cero y `energy.py` se descalibra (el video se alarga y salen AVISOS falsos).
 - **"Tiene eco":** ya lo corrige `audio.sh`. **No** lo endurezcas con un expansor rápido. Si pide más o
   menos limpieza, hazle 3 pruebas cortas (A/B/C, 15 s, solo voz, en Descargas) y que elija con el oído.
-- **"Está oscuro":** sube el punto 0.4/0.5 de la curva de `prep.sh`.
+- **"Está oscuro":** sube el punto 0.4/0.5 de la curva de `prep.sh`, o (más rápido, sin rehacer el video base) el
+  `brightness` de `Footage.tsx`: en NO_RENUNCIES 1.04 → 1.13 quedó bien.
 - **"Más dinámico":** más `steps` y más contraste entre planos; nada de movimiento dentro de la toma.
 - **Música:** `references/musica.md`.
 - **Foto de alguien:** búscala en `$DESCARGAS` (`image*.png` recientes), mejórala con

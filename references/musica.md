@@ -30,7 +30,10 @@
 - Licencia de Pixabay: uso gratuito, comercial y monetizado, sin atribución. Janeth lo aprobó **solo** con
   canciones gratuitas que no generen reclamos de derechos.
 - **Descartar toda canción con "Content ID Registered"** en su página: Instagram/YouTube marcarían el video.
-  La mayoría lo tiene; revisa cada candidata.
+  La mayoría lo tiene; revisa cada candidata. Lo fiable es el JSON de la página: `"name":"Content ID Registered","value":true`
+  (si no aparece ni ese dato ni el texto visible ">Content ID Registered<", está libre). En nov 2026, de ~70 pianos/acústicas
+  "calm" casi todas estaban registradas; las libres salieron buscando "soft piano", "calm acoustic", "warm ambient".
+- El enlace del MP3 está en `"contentUrl"` del JSON de la página (`cdn.pixabay.com/download/audio/…mp3`).
 - Buscar: `https://pixabay.com/music/search/<términos>/`. Con JavaScript en la página se pueden revisar
   varias candidatas con `fetch('/music/<slug>/')` buscando "Content ID Registered", el título y el
   `"name":"Mood","value":"…"`. El MP3 está en la página como `https://cdn.pixabay.com/audio/…mp3`
@@ -42,6 +45,8 @@
 - Medir la energía cada 3 s para elegir `MUSICA_INICIO_SEG` (donde ya suena la banda completa, o la
   parte más fuerte si la piden).
 - `VOLUMEN_MUSICA` según la fuerza de esa parte: mide "música X dB bajo la voz" y apunta a ~18-23 dB.
+  **Con canciones tranquilas (ambient/piano) eso queda casi inaudible:** en NO_RENUNCIES Janeth dijo "casi no se
+  escucha" a 17 dB y aprobó ~10 dB bajo la voz (`VOLUMEN_MUSICA` 0.25).
 - Anotar título, artista, licencia y URL en `constants.ts` del proyecto.
 
 ## Canciones ya usadas (no repetir)
@@ -64,3 +69,4 @@
 
 Probadas y rechazadas por Janeth (no volver a proponer): Ghost Surf Rock (Loyalty Freak Music),
 Powerful Stasis (Soft and Furious).
+| Guion 6 (NO_RENUNCIES, Doc Juanes) | EONA - Emotional Ambient Pop | Rockot (Pixabay) | `pixabay.com/music/beats-eona-emotional-ambient-pop-351436/` |

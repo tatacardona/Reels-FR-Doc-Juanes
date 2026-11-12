@@ -129,6 +129,8 @@ for ci, c in enumerate(CLIPS):
     if ends: rngs[-1] = (rngs[-1][0], min(c["src"][1], max(rngs[-1][1], max(ends) + END_PAD)))
     if "tail" in c:  # margen extra al final del tramo (p. ej. una "s" final suave que el corte se comía)
         rngs[-1] = (rngs[-1][0], min(c["src"][1], rngs[-1][1] + c["tail"]))
+    if "head" in c:  # margen extra al inicio del tramo (el fundido de 1 cuadro no debe caer sobre una consonante: "quince")
+        rngs[0] = (max(c["src"][0], rngs[0][0] - c["head"]), rngs[0][1])
     cuts = {t: z for t, z in c.get("steps", [])}  # cambios de plano forzados sin cortar audio
     split = []
     for a, b in rngs:

@@ -3,7 +3,7 @@ import { Captions, type Caption } from "./Captions";
 import { MUSICA, MUSICA_INICIO_SEG, VOLUMEN_MUSICA } from "./constants";
 import edit from "./edit.json";
 import { Footage, Tone, Vignette } from "./Footage";
-import { LEAK_SOUND, LEAK_STRENGTH } from "./constants";
+import { LEAK_SOUND, LEAK_STRENGTH, SFX_MODE, UNIONES_SIN_FUNDIDO } from "./constants";
 import { LightLeak } from "./LightLeak";
 import { Stickers, type Sticker } from "./Stickers";
 import { TornPhoto } from "./TornPhoto";
@@ -71,8 +71,8 @@ export const Reel: React.FC = () => {
           <Voice
             trim={c.trim}
             dur={c.dur}
-            fadeIn={i === 0 || clips[i - 1].trim + clips[i - 1].dur !== c.trim}
-            fadeOut={i === clips.length - 1 || c.trim + c.dur !== clips[i + 1].trim}
+            fadeIn={i === 0 || (clips[i - 1].trim + clips[i - 1].dur !== c.trim && !UNIONES_SIN_FUNDIDO.includes(c.trim))}
+            fadeOut={i === clips.length - 1 || (c.trim + c.dur !== clips[i + 1].trim && !UNIONES_SIN_FUNDIDO.includes(clips[i + 1].trim))}
           />
           {c.fx === "flash" ? <Flash /> : null}
         </Sequence>
@@ -80,14 +80,32 @@ export const Reel: React.FC = () => {
 
       {/* Whoosh en los cambios de tema: termina justo en el corte para no tapar la primera sílaba de la siguiente frase */}
       {clips
-        .filter((c) => c.fx === "whoosh" || c.fx === "flash")
+        .filter((c) => SFX_MODE !== "ninguno" && (c.fx === "whoosh" || c.fx === "flash"))
         .map((c, i) => (
           <Sequence key={i} from={Math.max(0, c.start - 7)} durationInFrames={7} name="Whoosh">
             {/* solo la cola del whoosh (7 cuadros) y más suave: con cortes apretados ya no hay silencio
                 antes del corte y un whoosh largo tapa el final de la palabra anterior ("elegibles") */}
-            <Audio src={staticFile("sfx-whoosh.wav")} trimBefore={6} volume={0.3} />
+            {SFX_MODE === "real" ? (
+              <Audio src={staticFile("real/whoosh1.wav")} volume={0.28} />
+            ) : (
+              <Audio src={staticFile("sfx-whoosh.wav")} trimBefore={6} volume={0.3} />
+            )}
           </Sequence>
         ))}
+
+      {/* Sonidos reales CC0 (SFX_MODE "real"): pop al aparecer una palabra de impacto, papel al salir una "alt" */}
+      {SFX_MODE === "real"
+        ? (edit.captions as Caption[]).map((c, i) => {
+            const alt = c.words.some((w) => w.emph && w.alt);
+            const imp = c.words.some((w) => w.emph && !w.alt);
+            if (!alt && !imp) return null;
+            return (
+              <Sequence key={`sfx${i}`} from={c.start} durationInFrames={alt ? 10 : 6} name="Sonido real" layout="none">
+                <Audio src={staticFile(alt ? "real/papel.wav" : "real/pop.wav")} trimBefore={alt ? 2 : 0} volume={alt ? 0.16 : 0.22} />
+              </Sequence>
+            );
+          })
+        : null}
 
       {MUSICA ? (
         <Sequence durationInFrames={bodyDur} name="Música">

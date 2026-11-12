@@ -47,3 +47,13 @@ export const COOL = 0;
 export const LEAK_STRENGTH = 0.25;
 // Sonido en el destello: null por defecto (se descartaron las campanitas "sfx-shimmer.wav")
 export const LEAK_SOUND: string | null = null;
+
+// Efectos de sonido: "sintetico" (los de siempre), "real" (grabaciones CC0 de Openverse en public/real/:
+// whoosh1.wav, pop.wav, papel.wav; anota los créditos en work/) o "ninguno". Janeth (11 nov, NO_RENUNCIES) prefirió
+// los reales a los sintéticos en la prueba A/B, y luego pidió quitarlos en ese video: pregunta en cada uno.
+export const SFX_MODE: "ninguno" | "sintetico" | "real" = "sintetico";
+
+// Cortes en mitad de la voz (p. ej. quitar una sílaba: "diciendo de que" → "diciendo que"): el fundido de 1-2
+// cuadros de cada tramo se come la sílaba. Pon aquí el cuadro del crudo (seg × 25) donde EMPIEZA el tramo que sigue
+// a esa unión, y pon microfundidos de 8 ms en public/voz-mejorada.wav justo en los dos puntos (ver problemas.md).
+export const UNIONES_SIN_FUNDIDO: number[] = [];

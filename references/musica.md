@@ -67,7 +67,8 @@
 | ACCESO_R1 (FR, Black Friday + 10 años) | Sapphire Dreams | HoggyArt (Pixabay) | `pixabay.com/music/pop-sapphire-dreams-274884/` |
 | MAS_SIMULACROS (FR, IMG_8034, 10 años + lista VIP) | Fragments of Forever (con voz) | HoggyArt (Pixabay) | `pixabay.com/music/pop-fragments-of-forever-297800/` |
 
-Probadas y rechazadas por Janeth (no volver a proponer): Ghost Surf Rock (Loyalty Freak Music),
+Probadas y rechazadas por Janeth (no volver a proponer): Sad Drama (AtlasAudio, «muy de película de terror»; para drama pide piano/chelo emotivo, sin moods Dark/Scary/Suspense), Ghost Surf Rock (Loyalty Freak Music),
 Powerful Stasis (Soft and Furious).
 | Guion 6 (NO_RENUNCIES, Doc Juanes) | EONA - Emotional Ambient Pop | Rockot (Pixabay) | `pixabay.com/music/beats-eona-emotional-ambient-pop-351436/` |
 | Guion 10 (EMPIEZA_CREERTELO, Doc Juanes) | Indie Pop | madstock (Pixabay) | `pixabay.com/music/indie-pop-indie-pop-335469/` |
+| Guion 2 vol2 (QUE_CUESTA, Doc Juanes) | Deep Emotional Background Music with Cinematic Cello and Piano | DesiFreeMusic (Pixabay) | `pixabay.com/music/modern-classical-deep-emotional-background-music-with-cinematic-cello-and-piano-551599/` |

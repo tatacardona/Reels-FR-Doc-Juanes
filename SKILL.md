@@ -284,6 +284,12 @@ Genérala con el `edit.json` de esa versión (si cambias el edit antes de que el
 **Doc Juanes:** usa `CoverDJ` (Juan recortado con IA, logo oficial, papel rasgado, dibujos) de `references/docjuanes.md`
 y ofrece varias fotos de Juan (del video y de su sesión profesional), con la luz mejorada y brazos completos.
 Si la lleva, con la primera versión del video (o cuando la apruebe) **propónle 3 portadas** distintas:
+- **Nunca un diseño igual a otro** (Janeth, 12 nov, QUE_CUESTA): cada video lleva composiciones nuevas, ligadas a su tema
+  (en QUE_CUESTA: póster documental, una factura con lo que «cuesta», un número tachado), aunque se mantengan paleta,
+  fuentes y logo. Las plantillas (`Cover`, `CoverDJ`) son punto de partida, no para repetir tal cual.
+- **Todo dentro de la zona del feed** (Janeth, 12 nov): el feed recorta la portada a 4:5 (y 285-1635 de 1920). Títulos,
+  frases, logo y cara van entre **y 340 y 1580**; arriba y abajo, franjas «muertas» de solo fondo (ahí puede caer algo
+  secundario, como las manos). Muéstrale cada portada con un recuadro amarillo de esa zona (`drawbox`) y luego la limpia.
 - Fotogramas con buena expresión (ojos abiertos, sonrisa o gesto que invite), revisados antes en una tira
   de miniaturas. Cada opción con un fotograma y un ángulo de texto distinto (el gancho, la frase emotiva,
   la invitación final), siempre fiel a lo que dice el video. **Poco texto**: una frase corta.

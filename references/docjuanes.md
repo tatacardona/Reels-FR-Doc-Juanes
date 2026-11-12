@@ -23,6 +23,8 @@ Janeth pidió que los videos y las portadas de Doc Juanes se vean como los posts
 - Opcional al final: flecha a mano que rebota hacia abajo bajo "Cuéntame…/Comenta…" (`ArrowDown` de DJ.tsx).
 
 ## Portadas (`CoverDJ`, 3 diseños; Janeth eligió el 2 "crema")
+> Ojo (12 nov): estos 3 diseños ya se usaron; **no se repiten**. Inventa composiciones nuevas para cada video y deja todo
+> en la zona del feed (y 340-1580), ver Paso 8 de SKILL.md. Ejemplo de diseños nuevos: `src/CoverNR.tsx` del proyecto QUE_CUESTA.
 - 1 oscuro (textura oliva, dato grande en lima) · 2 crema con franja oliva rasgada · 3 sobre el video.
 - Juan **recortado con IA** como en los posts: `scripts/recorte-fino.py <seg> work/rec.png` (MediaPipe + GrabCut,
   sin halo blanco y borde apenas suavizado; el recorte básico dejaba restos de pared) y luego

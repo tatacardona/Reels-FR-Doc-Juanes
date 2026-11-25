@@ -72,3 +72,4 @@ Powerful Stasis (Soft and Furious).
 | Guion 6 (NO_RENUNCIES, Doc Juanes) | EONA - Emotional Ambient Pop | Rockot (Pixabay) | `pixabay.com/music/beats-eona-emotional-ambient-pop-351436/` |
 | Guion 10 (EMPIEZA_CREERTELO, Doc Juanes) | Indie Pop | madstock (Pixabay) | `pixabay.com/music/indie-pop-indie-pop-335469/` |
 | Guion 2 vol2 (QUE_CUESTA, Doc Juanes) | Deep Emotional Background Music with Cinematic Cello and Piano | DesiFreeMusic (Pixabay) | `pixabay.com/music/modern-classical-deep-emotional-background-music-with-cinematic-cello-and-piano-551599/` |
+| Guion 6 vol2 (NO_PASÓ, Doc Juanes) | Heartfelt Echoes Rock Ballad | harrisonmiller (Pixabay) | `pixabay.com/music/rock-heartfelt-echoes-rock-ballad-283211/` |
